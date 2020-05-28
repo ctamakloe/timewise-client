@@ -3,6 +3,7 @@ import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/models/screen_section_data.dart';
 import 'package:time_wise_app/models/trip.dart';
 import 'package:time_wise_app/screens/trips/sections/coverage_info.dart';
+import 'package:time_wise_app/screens/trips/sections/services_info.dart';
 
 class TripDetailsScreen extends StatefulWidget {
   final Trip trip;
@@ -25,10 +26,12 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
 //        sectionAction: SectionAction('', '', {}),
 //        sectionContent: TripInfo(trip: widget.trip),
 //      ),
-//      ScreenSectionData(
-//          sectionTitle: 'AVAILABLE SERVICES',
-//          sectionAction: SectionAction('', '', {}),
-//          sectionContent: ServicesInfo(trip: widget.trip),
+
+      ScreenSectionData(
+          sectionTitle: 'AVAILABLE SERVICES',
+          sectionAction: SectionAction('', '', {}),
+          sectionContent: ServicesInfo(trip: widget.trip),),
+
       ScreenSectionData(
         sectionTitle: 'COVERAGE CHECKER',
         sectionAction: SectionAction('', '', {}),
