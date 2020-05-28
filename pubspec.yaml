@@ -29,6 +29,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
   intl: ^0.16.1
+  modal_bottom_sheet: ^0.1.6+1
+  charts_flutter: ^0.9.0
+  timeline: ^0.0.1
+  line_awesome_flutter: ^1.0.0
+#  syncfusion_flutter_charts: ^18.1.53
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +58,9 @@ flutter:
     - assets/images/trips/
     - assets/images/trips/scale/
     - assets/images/trips/type/
+    - assets/images/trips/info/
+    - assets/images/trips/train/
+    - assets/images/trips/coverage/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

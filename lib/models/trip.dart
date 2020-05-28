@@ -9,6 +9,7 @@ class Trip {
   String purpose;
   String description;
   String status;
+  List<TripLeg> tripLegs = sampleTripLegs;
 
   Trip(
       {this.id,
@@ -25,7 +26,6 @@ class Trip {
   String get title => '${this.origin} to ${this.destination}';
 
   String get schedule {
-
     String dt = DateFormat.Hm().format(DateTime.parse(departsAt));
     String at = DateFormat.Hm().format(DateTime.parse(arrivesAt));
     return '$dt - $at';
@@ -57,14 +57,89 @@ class Trip {
     return data;
   }
 
-  static List<Trip> sampleTrips = tripJson.map<Trip>((json) => Trip.fromJson(json)).toList();
+  static List<Trip> sampleTrips =
+      tripJson.map<Trip>((json) => Trip.fromJson(json)).toList();
+
+  static List<TripLeg> sampleTripLegs = [
+    TripLeg(
+        startStation: 'Nottigham',
+        endStation: 'London St Pancras Intl',
+        legType: 'departure', // departure, transit, arrival
+        dataCells: [
+          TripLegDataCell('10:00', 10, '1'),
+          TripLegDataCell('10:10', 20, '2'),
+          TripLegDataCell('10:20', 30, '3'),
+          TripLegDataCell('10:30', 30, '0'),
+        ] // <TripLegDataCell>[]
+    ),
+    TripLeg(
+        startStation: 'London St Pancras Intl',
+        endStation: 'Manchester Picadilly (MAN)',
+        legType: 'departure', // departure, transit, arrival
+        dataCells: [
+          TripLegDataCell('10:40', 40, '2'),
+          TripLegDataCell('10:50', 50, '3'),
+          TripLegDataCell('11:00', 10, '1'),
+          TripLegDataCell('11:10', 20, '0'),
+          TripLegDataCell('11:20', 30, '0'),
+          TripLegDataCell('11:30', 30, '1'),
+          TripLegDataCell('11:40', 40, '2'),
+          TripLegDataCell('11:50', 50, '3'),
+        ] // <TripLegDataCell>[]
+    ),
+    TripLeg(
+      startStation: 'Manchester Picadilly (MAN)',
+        endStation: 'East Midlands Airport (EMA)',
+        legType: 'departure', // departure, transit, arrival
+        dataCells: [
+          TripLegDataCell('12:00', 10, '1'),
+          TripLegDataCell('12:10', 20, '0'),
+          TripLegDataCell('12:20', 30, '0'),
+          TripLegDataCell('12:30', 30, '1'),
+          TripLegDataCell('12:40', 40, '2'),
+          TripLegDataCell('12:50', 50, '3'),
+        ] // <TripLegDataCell>[]
+    ),
+  ];
+}
+
+class TripLeg {
+  String startStation;
+  String endStation;
+  String legType;
+  List<TripLegDataCell> dataCells;
+
+  TripLeg({
+    this.startStation, // Nottingham
+    this.endStation, // London St Pancras Intl
+    this.legType, // departure, transit, arrival
+    this.dataCells, // <TripLegDataCell>[]
+  });
+// NB: create a var legDuration => used on server side to calculate no. of cells to be
+// generated
+}
+
+class TripLegDataCell {
+  String timeLabel;
+  int duration;
+  String rating;
+
+  TripLegDataCell(this.timeLabel, this.duration, this.rating);
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
+  }
 }
 
 List<Map<String, Object>> tripJson = [
   {
     "id": 1,
-    "origin": "Manchester Picadilly (MAN)",
-    "destination": "London St Pancras International (STP)",
+//    "origin": "Manchester Picadilly (MAN)",
+//    "destination": "London St Pancras International (STP)",
+    "origin": "Manchester Picadilly",
+    "destination": "London St Pancras International",
     "departs_at": "2020-06-02T11:05:46.120Z",
     "arrives_at": "2000-01-01T14:05:46.120Z",
     "purpose": "leisure",
@@ -73,8 +148,8 @@ List<Map<String, Object>> tripJson = [
   },
   {
     "id": 2,
-    "origin": "Nottingham (NOT)",
-    "destination": "London St Pancras International (STP)",
+    "origin": "Nottingham",
+    "destination": "London St Pancras International",
     "departs_at": "2020-05-25T07:10:46.120Z",
     "arrives_at": "2000-01-01T09:05:46.120Z",
     "purpose": "business",
@@ -83,13 +158,12 @@ List<Map<String, Object>> tripJson = [
   },
   {
     "id": 3,
-    "origin": "London St Pancras International (STP)",
-    "destination": "Nottingham (NOT)",
-    "departs_at": "2020-05-25T18:15:46.120Z",
-    "arrives_at": "2000-01-01T20:25:46.120Z",
+    "origin": "London St Pancras International",
+    "destination": "Nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
     "purpose": "business",
     "description": "Return: Meeting at ABC head office",
     "status": "upcoming"
   }
 ];
-

@@ -23,6 +23,7 @@ class _ScreenSectionState extends State<ScreenSection> {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+      height: 600,
       decoration: BoxDecoration(
         color: Colors.white,
       ),

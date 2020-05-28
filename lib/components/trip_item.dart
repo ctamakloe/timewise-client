@@ -31,8 +31,8 @@ class _TripListItemState extends State<TripListItem> {
             Expanded(
               flex: 1,
               child: Image(
-                  height: 25.0,
-                  width: 25.0,
+                  height: 30.0,
+                  width: 30.0,
                   fit: BoxFit.contain,
                   image: AssetImage(
                       'assets/images/trips/type/${widget.trip.purpose}.png')),

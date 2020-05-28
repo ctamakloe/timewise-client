@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:time_wise_app/screens/profile/profile_view.dart';
 import 'package:time_wise_app/screens/trips/trips_view.dart';
 import 'package:time_wise_app/screens/wizard/wizard_view.dart';
@@ -35,6 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
         // sets the inactive color of the `BottomNavigationBar`
         child: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           currentIndex: _currentIndex,
           onTap: (int index) {
             setState(() {
@@ -46,7 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: Colors.indigo.shade300,
               title:
                   Text(destination.linkTitle, style: TextStyle(fontSize: 16.0)),
-              icon: Icon(destination.icon),
+              icon: Icon(destination.icon,
+                size: 30.0,
+              ),
             );
           }).toList(),
         ),
@@ -56,9 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 const List<Destination> allDestinations = <Destination>[
-  Destination('Trips', Icons.train, TripsView()),
-  Destination('Plan', Icons.add_circle, WizardView()),
-  Destination('Profile', Icons.account_circle, ProfileView()),
+  Destination('Trips', LineAwesomeIcons.train, TripsView()),
+  Destination('Plan', LineAwesomeIcons.plus_circle, WizardView()),
+  Destination('Profile', LineAwesomeIcons.user_circle, ProfileView()),
 ];
 
 class Destination {

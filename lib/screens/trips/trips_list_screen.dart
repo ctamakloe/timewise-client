@@ -4,7 +4,10 @@ import 'package:time_wise_app/models/trip.dart';
 class TripsListScreen extends StatefulWidget {
   final Map arguments;
 
-  const TripsListScreen(this.arguments, {Key key,}) : super(key: key);
+  const TripsListScreen(
+    this.arguments, {
+    Key key,
+  }) : super(key: key);
 
   @override
   _TripsListScreenState createState() => _TripsListScreenState();
@@ -15,7 +18,8 @@ class _TripsListScreenState extends State<TripsListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('MORE TRIPS'),
+          title: Text('TimeWise',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
           backgroundColor: Colors.indigo,
         ),
         body: SizedBox(

@@ -7,7 +7,7 @@ import 'package:time_wise_app/models/trip.dart';
 class TripsHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<ScreenSectionData> sectionData = <ScreenSectionData>[
+    List<ScreenSectionData> sectionsData = <ScreenSectionData>[
       ScreenSectionData(
           sectionTitle: 'UPCOMING TRIPS',
           sectionAction: SectionAction(
@@ -23,13 +23,13 @@ class TripsHomeScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text('TRIPS',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+          title: Text('TimeWise',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
         ),
         body: ListView.builder(
-            itemCount: sectionData.length,
+            itemCount: sectionsData.length,
             itemBuilder: (context, index) {
-              return _buildSection(context, sectionData[index]);
+              return _buildSection(context, sectionsData[index]);
             }));
   }
 
@@ -49,31 +49,3 @@ class TripsHomeScreen extends StatelessWidget {
     ));
   }
 }
-
-//List<ScreenSectionData> sectionData = <ScreenSectionData>[
-//  ScreenSectionData(
-//      sectionTitle: 'UPCOMING TRIPS',
-//      sectionAction: SectionAction('Show more', '/tripsList', {'trips': Trip.sampleTrips}),
-//      sectionContent: TripListContent(Trip.sampleTrips)
-//  ),
-//  ScreenSectionData(
-//      sectionTitle: 'PREVIOUS TRIPS',
-//      sectionAction: SectionAction('Show more', '/tripsList', {'trips': Trip.sampleTrips}),
-//      sectionContent: TripListContent(Trip.sampleTrips)
-//  ),
-//];
-
-//class TripListContent extends StatelessWidget {
-//  final List<Trip> trips;
-//
-//  TripListContent(this.trips);
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Container(
-//        child: Column(
-//      children:
-//          trips.map<TripListItem>((trip) => TripListItem(trip: trip)).toList(),
-//    ));
-//  }
-//}

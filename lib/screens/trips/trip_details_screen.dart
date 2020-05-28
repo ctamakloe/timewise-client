@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/models/screen_section_data.dart';
 import 'package:time_wise_app/models/trip.dart';
+import 'package:time_wise_app/screens/trips/sections/coverage_info.dart';
 
 class TripDetailsScreen extends StatefulWidget {
   final Trip trip;
@@ -18,33 +19,33 @@ class TripDetailsScreen extends StatefulWidget {
 class _TripDetailsScreenState extends State<TripDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    List<ScreenSectionData> sectionData = <ScreenSectionData>[
+    List<ScreenSectionData> sectionsData = <ScreenSectionData>[
+//      ScreenSectionData(
+//        sectionTitle: 'TRIP DETAILS',
+//        sectionAction: SectionAction('', '', {}),
+//        sectionContent: TripInfo(trip: widget.trip),
+//      ),
+//      ScreenSectionData(
+//          sectionTitle: 'AVAILABLE SERVICES',
+//          sectionAction: SectionAction('', '', {}),
+//          sectionContent: ServicesInfo(trip: widget.trip),
       ScreenSectionData(
-        sectionTitle: 'TRIP DETAILS',
-        sectionAction: SectionAction(
-            'Edit trip', '/tripsList', {'trips': Trip.sampleTrips}),
-        sectionContent: _tripInfoContent(),
+        sectionTitle: 'COVERAGE CHECKER',
+        sectionAction: SectionAction('', '', {}),
+        sectionContent: CoverageInfo(trip: widget.trip),
       ),
-      ScreenSectionData(
-          sectionTitle: 'TRAIN RESOURCES',
-          sectionAction: SectionAction('', '', {}),
-          sectionContent: _trainResourcesContent()),
-      ScreenSectionData(
-          sectionTitle: 'COVERAGE CHECKER',
-          sectionAction: SectionAction('', '', {}),
-          sectionContent: _coverageCheckerContent()),
     ];
 
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text('TRIPS DETAILS',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+          title: Text('TimeWise',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
         ),
         body: ListView.builder(
-            itemCount: sectionData.length,
+            itemCount: sectionsData.length,
             itemBuilder: (context, index) {
-              return _buildSection(context, sectionData[index]);
+              return _buildSection(context, sectionsData[index]);
             }));
   }
 
@@ -54,17 +55,5 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
       sectionAction: sectionData.sectionAction,
       sectionContent: sectionData.sectionContent,
     );
-  }
-
-  Widget _tripInfoContent() {
-    return Container(child: Text('trip info'));
-  }
-
-  Widget _trainResourcesContent() {
-    return Container(child: Text('train resources'));
-  }
-
-  Widget _coverageCheckerContent() {
-    return Container(child: Text('coverage checker'));
   }
 }
