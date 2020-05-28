@@ -75,7 +75,7 @@ class Trip {
     TripLeg(
         startStation: 'London St Pancras Intl',
         endStation: 'Manchester Picadilly (MAN)',
-        legType: 'departure', // departure, transit, arrival
+        legType: 'transit', // departure, transit, arrival
         dataCells: [
           TripLegDataCell('10:40', 40, '2'),
           TripLegDataCell('10:50', 50, '3'),
@@ -90,7 +90,7 @@ class Trip {
     TripLeg(
       startStation: 'Manchester Picadilly (MAN)',
         endStation: 'East Midlands Airport (EMA)',
-        legType: 'departure', // departure, transit, arrival
+        legType: 'arrival', // departure, transit, arrival
         dataCells: [
           TripLegDataCell('12:00', 10, '1'),
           TripLegDataCell('12:10', 20, '0'),

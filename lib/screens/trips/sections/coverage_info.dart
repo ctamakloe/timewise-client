@@ -39,12 +39,6 @@ class _CoverageInfoState extends State<CoverageInfo> {
   }
 
   _getLegMaps(Trip trip) {
-//    return [
-//      LegCoverageHeatMap(widget.trip.tripLegs[0]),
-//      LegCoverageHeatMap(widget.trip.tripLegs[1]),
-////      LegCoverageHeatMap(widget.trip.tripLegs[2]),
-//    ];
-
     List<LegCoverageHeatMap> heatMaps = [];
     trip.tripLegs.forEach((leg) => heatMaps.add(LegCoverageHeatMap(leg)));
     return heatMaps;

@@ -17,7 +17,15 @@ class LegCoverageHeatMap extends StatelessWidget {
         child: Container(
           child: Stack(
             children: [
-              // Station name
+              // Chart
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  height: 125.0,
+                  child: _combineColumns(),
+                ),
+              ),
+              // Start station label
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Container(
@@ -26,14 +34,17 @@ class LegCoverageHeatMap extends StatelessWidget {
                       this.tripLeg.startStation,
                     )),
               ),
-              // Cell columns
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  height: 125.0,
-                  child: _coverageColumns(),
-                ),
-              ),
+              // End station label
+              (tripLeg.legType == 'arrival')
+                  ? Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                          width: 200.0,
+                          child: Text(
+                            this.tripLeg.endStation,
+                          )),
+                    )
+                  : Container(),
             ],
           ),
         ),
@@ -42,7 +53,7 @@ class LegCoverageHeatMap extends StatelessWidget {
   }
 
   // GENERATORS
-  _coverageColumns() {
+  _combineColumns() {
     List<Widget> columns = [
       _stationColumn(),
     ];
@@ -51,6 +62,12 @@ class LegCoverageHeatMap extends StatelessWidget {
       columns.add(_dataColumn(cell));
       columns.add(SizedBox(width: 5.0));
     });
+
+    if (tripLeg.legType == 'arrival') {
+      columns.add(
+        _stationColumn(),
+      );
+    }
 
     return Row(
       children: columns,
