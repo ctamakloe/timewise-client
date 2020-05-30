@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:time_wise_app/models/trip.dart';
 
-class LegCoverageHeatMap extends StatelessWidget {
+class LegHeatMap extends StatelessWidget {
   final TripLeg tripLeg;
-
   final double cellHeight = 20;
 
-  LegCoverageHeatMap(this.tripLeg);
+  LegHeatMap(this.tripLeg);
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +34,15 @@ class LegCoverageHeatMap extends StatelessWidget {
                     )),
               ),
               // End station label
-              (tripLeg.legType == 'arrival')
-                  ? Align(
-                      alignment: Alignment.bottomRight,
-                      child: Container(
-                          width: 200.0,
-                          child: Text(
-                            this.tripLeg.endStation,
-                          )),
-                    )
-                  : Container(),
+              if (tripLeg.legType == 'arrival')
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                      width: 200.0,
+                      child: Text(
+                        this.tripLeg.endStation,
+                      )),
+                ),
             ],
           ),
         ),
@@ -118,25 +116,25 @@ class LegCoverageHeatMap extends StatelessWidget {
       case '2':
         {
 //        color = Colors.red[100];
-          color = Colors.green[300];
+          color = Colors.green[200];
         }
         break;
       case '3':
         {
 //        color = Colors.amber[300];
-          color = Colors.green[500];
+          color = Colors.green[300];
         }
         break;
       case '4':
         {
 //        color = Colors.green[100];
-          color = Colors.green[700];
+          color = Colors.green[400];
         }
         break;
       case '5':
         {
 //        color = Colors.green[300];
-          color = Colors.green[900];
+          color = Colors.green[500];
         }
         break;
     }
@@ -170,6 +168,7 @@ class LegCoverageHeatMap extends StatelessWidget {
           color: Colors.white,
           child: Icon(
             LineAwesomeIcons.dot_circle,
+            color: Colors.indigo,
           )),
     );
   }
@@ -181,6 +180,7 @@ class LegCoverageHeatMap extends StatelessWidget {
         width: 50.0,
         color: Colors.white,
         child: Divider(
+          color: Colors.indigo,
           thickness: 3.0,
           height: 0,
         ));

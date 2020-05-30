@@ -57,8 +57,14 @@ class Trip {
     return data;
   }
 
-  static List<Trip> sampleTrips =
-      tripJson.map<Trip>((json) => Trip.fromJson(json)).toList();
+  static List<Trip> sampleInProgressTrips =
+      inProgressTripsJson.map<Trip>((json) => Trip.fromJson(json)).toList();
+
+  static List<Trip> sampleUpcomingTrips =
+      upcomingTripsJson.map<Trip>((json) => Trip.fromJson(json)).toList();
+
+  static List<Trip> sampleCompleteTrips =
+      completeTripsJson.map<Trip>((json) => Trip.fromJson(json)).toList();
 
   static List<TripLeg> sampleTripLegs = [
     TripLeg(
@@ -71,7 +77,7 @@ class Trip {
           TripLegDataCell('10:20', 30, '3'),
           TripLegDataCell('10:30', 30, '0'),
         ] // <TripLegDataCell>[]
-    ),
+        ),
     TripLeg(
         startStation: 'London St Pancras Intl',
         endStation: 'Manchester Picadilly (MAN)',
@@ -86,9 +92,9 @@ class Trip {
           TripLegDataCell('11:40', 40, '2'),
           TripLegDataCell('11:50', 50, '3'),
         ] // <TripLegDataCell>[]
-    ),
+        ),
     TripLeg(
-      startStation: 'Manchester Picadilly (MAN)',
+        startStation: 'Manchester Picadilly (MAN)',
         endStation: 'East Midlands Airport (EMA)',
         legType: 'arrival', // departure, transit, arrival
         dataCells: [
@@ -99,7 +105,7 @@ class Trip {
           TripLegDataCell('12:40', 40, '2'),
           TripLegDataCell('12:50', 50, '3'),
         ] // <TripLegDataCell>[]
-    ),
+        ),
   ];
 }
 
@@ -133,7 +139,7 @@ extension StringExtension on String {
   }
 }
 
-List<Map<String, Object>> tripJson = [
+List<Map<String, Object>> upcomingTripsJson = [
   {
     "id": 1,
 //    "origin": "Manchester Picadilly (MAN)",
@@ -144,26 +150,94 @@ List<Map<String, Object>> tripJson = [
     "arrives_at": "2000-01-01T14:05:46.120Z",
     "purpose": "leisure",
     "description": "Visit Sean at Uni",
+    "status": "in-progress"
+  },
+];
+
+List<Map<String, Object>> inProgressTripsJson = [
+  {
+    "id": 2,
+    "origin": "london st pancras international",
+    "destination": "nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
+    "purpose": "business",
+    "description": "Return: Meeting at ABC Head Office",
     "status": "upcoming"
   },
   {
-    "id": 2,
+    "id": 3,
+    "origin": "Manchester Picadilly",
+    "destination": "Nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
+    "purpose": "leisure",
+    "description": "Vegan meet-up in Notts",
+    "status": "upcoming"
+  },
+  {
+    "id": 4,
+    "origin": "Reading",
+    "destination": "Nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
+    "purpose": "business",
+    "description": "SXSW Conference",
+    "status": "upcoming"
+  }
+];
+
+List<Map<String, Object>> completeTripsJson = [
+  {
+    "id": 5,
+//    "origin": "Manchester Picadilly (MAN)",
+//    "destination": "London St Pancras International (STP)",
+    "origin": "Manchester Picadilly",
+    "destination": "London St Pancras International",
+    "departs_at": "2020-06-02T11:05:46.120Z",
+    "arrives_at": "2000-01-01T14:05:46.120Z",
+    "purpose": "leisure",
+    "description": "Visit Sean at Uni",
+    "status": "complete"
+  },
+  {
+    "id": 6,
     "origin": "Nottingham",
     "destination": "London St Pancras International",
     "departs_at": "2020-05-25T07:10:46.120Z",
     "arrives_at": "2000-01-01T09:05:46.120Z",
     "purpose": "business",
     "description": "Meeting at ABC head office",
-    "status": "upcoming"
+    "status": "complete"
   },
   {
-    "id": 3,
-    "origin": "London St Pancras International",
+    "id": 7,
+    "origin": "london st pancras international",
+    "destination": "nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
+    "purpose": "business",
+    "description": "Return: Meeting at ABC Head Office",
+    "status": "complete"
+  },
+  {
+    "id": 8,
+    "origin": "Manchester Picadilly",
+    "destination": "Nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
+    "purpose": "leisure",
+    "description": "Vegan meet-up in Notts",
+    "status": "complete"
+  },
+  {
+    "id": 9,
+    "origin": "Reading",
     "destination": "Nottingham",
     "departs_at": "2020-12-25T18:15:46.120Z",
     "arrives_at": "2020-12-25T20:25:46.120Z",
     "purpose": "business",
-    "description": "Return: Meeting at ABC head office",
-    "status": "upcoming"
+    "description": "SXSW Conference",
+    "status": "complete"
   }
 ];

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:time_wise_app/models/trip.dart';
 
 class TripListItem extends StatefulWidget {
@@ -16,8 +17,7 @@ class _TripListItemState extends State<TripListItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/tripDetails',
-            arguments: widget.trip);
+        Navigator.pushNamed(context, '/tripDetails', arguments: widget.trip);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -30,12 +30,17 @@ class _TripListItemState extends State<TripListItem> {
           children: [
             Expanded(
               flex: 1,
-              child: Image(
-                  height: 30.0,
-                  width: 30.0,
-                  fit: BoxFit.contain,
-                  image: AssetImage(
-                      'assets/images/trips/type/${widget.trip.purpose}.png')),
+              child: Icon(widget.trip.purpose == 'leisure'
+                  ? LineAwesomeIcons.theater_masks
+                  : LineAwesomeIcons.briefcase,
+                  size: 30.0,
+              ),
+//              child: Image(
+//                  height: 30.0,
+//                  width: 30.0,
+//                  fit: BoxFit.contain,
+//                  image: AssetImage(
+//                      'assets/images/trips/type/${widget.trip.purpose}.png')),
             ),
             Expanded(
                 flex: 6,

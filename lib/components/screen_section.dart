@@ -22,7 +22,6 @@ class _ScreenSectionState extends State<ScreenSection> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
 //      height: 600,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -31,7 +30,7 @@ class _ScreenSectionState extends State<ScreenSection> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // header
-          _buildSectionHeader(),
+          if (widget.sectionTitle != '') _buildSectionHeader(),
           // content
           widget.sectionContent,
         ],
@@ -41,7 +40,7 @@ class _ScreenSectionState extends State<ScreenSection> {
 
   _buildSectionHeader() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

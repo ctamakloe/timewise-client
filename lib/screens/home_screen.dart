@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           items: allDestinations.map((Destination destination) {
             return BottomNavigationBarItem(
-              backgroundColor: Colors.indigo.shade300,
+              backgroundColor: Colors.indigoAccent,
               title:
                   Text(destination.linkTitle, style: TextStyle(fontSize: 16.0)),
               icon: Icon(destination.icon,

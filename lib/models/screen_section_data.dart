@@ -17,5 +17,5 @@ class SectionAction {
   final String route;
   final Map routeArguments;
 
-  SectionAction(this.title, this.route, this.routeArguments);
+  SectionAction({this.title='', this.route='', this.routeArguments});
 }

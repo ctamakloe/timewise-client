@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class IconTile extends StatelessWidget {
   final Function onTap;
   final IconData icon;
+  final Color iconColor;
 
-  IconTile({this.icon, this.onTap});
+  IconTile({@required this.icon, @required this.onTap, this.iconColor});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +15,8 @@ class IconTile extends StatelessWidget {
           child: Icon(
         icon,
         size: 30,
-      )
-//        child: Image(
-//          image: AssetImage('assets/images/trips/train/$iconName.png'),
-//          height: 30.0,
-//          width: 30.0,
-//        ),
-          ),
+        color: iconColor != null ? iconColor : null,
+      )),
     );
   }
 }

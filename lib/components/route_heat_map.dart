@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-class HeatMap extends StatelessWidget {
+class RouteHeatMap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // compile a bunch of data columns to get the map for a leg
