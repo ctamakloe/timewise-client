@@ -3,7 +3,10 @@ import "package:charcode/html_entity.dart";
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:time_wise_app/components/icon_tile.dart';
+import 'package:time_wise_app/components/tw_flatbutton.dart';
 import 'package:time_wise_app/models/trip.dart';
+import 'package:time_wise_app/screens/trips/trip_evaluation_screen.dart';
+import 'package:time_wise_app/screens/trips/trip_start_screen.dart';
 
 class TripDetailsContent extends StatelessWidget {
   const TripDetailsContent({
@@ -260,17 +263,21 @@ class TripDetailsContent extends StatelessWidget {
     }
   }
 
-  FlatButton _statusButton(BuildContext context) {
-    return FlatButton(
-        color: Colors.indigo[300],
-        textColor: Colors.white,
-        child: Text(this.trip.status == 'upcoming' ? 'START TRIP' : 'END TRIP'),
+  TWFlatButton _statusButton(BuildContext context) {
+    return TWFlatButton(
+        context: context,
+        buttonText: this.trip.status == 'upcoming' ? 'START TRIP' : 'END TRIP',
         onPressed: () {
           switch (this.trip.status) {
             // START TRIP
             case 'upcoming':
               {
                 // TODO: set trip to in-progress on server
+                showMaterialModalBottomSheet(
+                  context: context,
+                  builder: (context, scrollController) =>
+                      TripStartScreen({'trip': this.trip}),
+                );
               }
               break;
             // END TRIP
@@ -278,8 +285,17 @@ class TripDetailsContent extends StatelessWidget {
               {
                 // TODO: set trip to started on server
                 // navigate to trip evaluation screen
-                Navigator.pushNamed(context, '/tripEval',
-                    arguments: {'trip': this.trip});
+//                Navigator.pushNamed(context, '/tripEval',
+//                    arguments: {'trip': this.trip});
+//                showBarModalBottomSheet(
+//                    context: context,
+//                    builder:
+//                );
+                showMaterialModalBottomSheet(
+                  context: context,
+                  builder: (context, scrollController) =>
+                      TripEvaluationScreen({'trip': this.trip}),
+                );
               }
               break;
             default:

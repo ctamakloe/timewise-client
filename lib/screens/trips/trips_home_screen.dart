@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_wise_app/components/app_bar_title.dart';
 import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/components/trip_list.dart';
 import 'package:time_wise_app/models/screen_section_data.dart';
@@ -18,28 +19,26 @@ class TripsHomeScreen extends StatelessWidget {
               title: 'Show more',
               route: '/tripsList',
               routeArguments: {
-                'title': 'Upcoming Trips',
+                'title': 'Trips • Upcoming',
                 'trips': Trip.sampleInProgressTrips
               }),
-          sectionContent: TripList(trips: Trip.sampleInProgressTrips)),
+          sectionContent: TripList(trips: Trip.sampleInProgressTrips.take(2).toList())),
       ScreenSectionData(
           sectionTitle: 'PREVIOUS',
           sectionAction: SectionAction(
               title: 'Show more',
               route: '/tripsList',
               routeArguments: {
-                'title': 'Previous Trips',
+                'title': 'Trips • Previous',
                 'trips': Trip.sampleCompleteTrips
               }),
-          sectionContent: TripList(trips: Trip.sampleCompleteTrips)),
+          sectionContent: TripList(trips: Trip.sampleCompleteTrips.take(2).toList())),
     ];
 
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: Text('Trips',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-        ),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(60.0),
+            child: TimeWiseAppBar(title: 'Trips')),
         body: ListView.builder(
             itemCount: sectionsData.length,
             itemBuilder: (context, index) {

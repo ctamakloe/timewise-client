@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:time_wise_app/screens/trips/trip_details/trip_details_screen.dart';
 import 'package:time_wise_app/screens/trips/trip_evaluation_screen.dart';
+import 'package:time_wise_app/screens/trips/trip_start_screen.dart';
 import 'package:time_wise_app/screens/trips/trips_home_screen.dart';
 import 'package:time_wise_app/screens/trips/trips_list_screen.dart';
 
@@ -32,6 +33,8 @@ class _TripsViewState extends State<TripsView> {
                 return TripsListScreen(arguments);
               case '/tripDetails':
                 return TripDetailsScreen(arguments);
+              case '/tripStart':
+                return TripStartScreen(arguments);
               case '/tripEval':
                 return TripEvaluationScreen(arguments);
             }

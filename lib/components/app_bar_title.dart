@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AppBarTitle extends StatelessWidget {
-  const AppBarTitle({
+class TimeWiseAppBar extends StatelessWidget {
+  const TimeWiseAppBar({
     Key key,
     @required this.title,
   }) : super(key: key);
@@ -10,7 +10,11 @@ class AppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(this.title,
-        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold));
+    return AppBar(
+        elevation: 0,
+        title: Text(this.title,
+            style: TextStyle(
+              fontSize: 20.0,
+            )));
   }
 }

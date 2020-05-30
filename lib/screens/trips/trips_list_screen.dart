@@ -6,7 +6,8 @@ import 'package:time_wise_app/models/screen_section_data.dart';
 import 'package:time_wise_app/models/trip.dart';
 
 class TripsListScreen extends StatefulWidget {
-  final Map arguments; // using arguments cos i need the title for the screen as well
+  final Map
+      arguments; // using arguments cos i need the title for the screen as well
 
   const TripsListScreen(
     this.arguments, {
@@ -21,9 +22,9 @@ class _TripsListScreenState extends State<TripsListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: AppBarTitle(title: widget.arguments['title']),
-      ),
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60.0),
+          child: TimeWiseAppBar(title: widget.arguments['title'])),
       body: ScreenSection(
           sectionTitle: '',
           sectionAction: SectionAction(),
