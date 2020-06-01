@@ -3,6 +3,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:time_wise_app/components/train_schedule_tile.dart';
 import 'package:time_wise_app/components/tw_autocomplete_textfield.dart';
 import 'package:time_wise_app/components/tw_datetime.dart';
+import 'package:time_wise_app/components/tw_flatbutton.dart';
 import 'package:time_wise_app/models/train_schedule.dart';
 
 class WizardContent extends StatefulWidget {
@@ -17,7 +18,12 @@ class _WizardContentState extends State<WizardContent> {
 
   int currentStep = 0;
   bool complete = false;
-  StepperType stepperType = StepperType.horizontal;
+
+  bool notFirstStep() => !(currentStep == 0);
+
+  bool lastStep() => currentStep == steps.length;
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   next() {
     currentStep + 1 != steps.length
@@ -39,25 +45,61 @@ class _WizardContentState extends State<WizardContent> {
 
   @override
   Widget build(BuildContext context) {
-
     steps = [
       _stepOneContent(),
       _stepTwoContent(),
       _stepThreeContent(),
     ];
 
+    void submit() {
+//      if (this._formKey.currentState.validate()) {}
+      _formKey.currentState.save();
+    }
+
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: Stepper(
-                type: stepperType,
+            child: Form(
+              key: this._formKey,
+              child: Stepper(
+                type: StepperType.vertical,
                 steps: steps,
                 currentStep: currentStep,
                 onStepContinue: next,
                 onStepCancel: cancel,
-                onStepTapped: (step) => goTo(step)),
+                onStepTapped: (step) => goTo(step),
+                controlsBuilder: (BuildContext context,
+                        {VoidCallback onStepContinue,
+                        VoidCallback onStepCancel}) =>
+                    Container(
+                      height: 160.0,
+                  padding: EdgeInsets.fromLTRB(0, 30.0, 0, 0),
+                  child: Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TWFlatButton(
+                          inverted: false,
+                          context: context,
+                          buttonText: lastStep() ? 'SAVE' : 'NEXT',
+                          onPressed: onStepContinue,
+                        ),
+                        SizedBox(height: 10.0,),
+                        if (notFirstStep())
+                          TWFlatButton(
+                            inverted: true,
+                            context: context,
+                            buttonText: 'BACK',
+                            onPressed: onStepCancel,
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -66,14 +108,14 @@ class _WizardContentState extends State<WizardContent> {
 
   _stepOneContent() {
     TextEditingController _fromStationController =
-    TextEditingController(text: '');
-    TextEditingController _toStationController = TextEditingController(text: '');
+        TextEditingController(text: '');
+    TextEditingController _toStationController =
+        TextEditingController(text: '');
     return Step(
       title: const Text('Schedule'),
       isActive: true,
       state: StepState.complete,
       content: Container(
-        height: 420.0,
         child: Column(
           children: [
             TWStationAutoCompleteTextField(
@@ -114,7 +156,7 @@ class _WizardContentState extends State<WizardContent> {
       isActive: false,
       state: StepState.editing,
       content: Container(
-        height: 420.0,
+        height: 350.0,
         child: ListView.builder(
             itemCount: this.schedules.length,
             itemBuilder: (BuildContext context, int index) {
@@ -123,8 +165,8 @@ class _WizardContentState extends State<WizardContent> {
       ),
     );
   }
-
 }
+
 _stepThreeContent() {
   List<bool> isSelected = [false, false];
   return Step(
@@ -132,92 +174,89 @@ _stepThreeContent() {
     isActive: false,
     state: StepState.editing,
     content: Container(
-      height: 420.0,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Travel Direction', style: TextStyle(fontSize: 16.0), ),
-                ToggleButtons(
-                  color: Colors.indigo,
-                  fillColor: Colors.indigo,
-                  borderColor: Colors.indigo,
-                  selectedColor: Colors.white,
-                  selectedBorderColor: Colors.indigo,
-                  borderRadius: BorderRadius.circular(5.0),
-                  children: [
-                    Container(
-                      width: 110.0,
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Outbound'),
-                      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Travel Direction',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              ToggleButtons(
+                color: Colors.indigo,
+                fillColor: Colors.indigo,
+                borderColor: Colors.indigo,
+                selectedColor: Colors.white,
+                selectedBorderColor: Colors.indigo,
+                borderRadius: BorderRadius.circular(5.0),
+                children: [
+                  Container(
+                    width: 110.0,
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Outbound'),
                     ),
-                    Container(
-                      width: 110.0,
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Return'),
-                      ),
+                  ),
+                  Container(
+                    width: 110.0,
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Return'),
                     ),
-                  ],
-                  onPressed: (int index) {
-                  },
-                  isSelected: isSelected,
-                ),
-              ],
-            ),
-
-            SizedBox(height: 20.0),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Trip Type', style: TextStyle(fontSize: 16.0), ),
-                ToggleButtons(
-                  color: Colors.indigo,
-                  fillColor: Colors.indigo,
-                  borderColor: Colors.indigo,
-                  selectedColor: Colors.white,
-                  selectedBorderColor: Colors.indigo,
-                  borderRadius: BorderRadius.circular(5.0),
-                  children: [
-                    Container(
-                      width: 110.0,
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Business'),
-                      ),
+                  ),
+                ],
+                onPressed: (int index) {},
+                isSelected: isSelected,
+              ),
+            ],
+          ),
+          SizedBox(height: 20.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Trip Type',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              ToggleButtons(
+                color: Colors.indigo,
+                fillColor: Colors.indigo,
+                borderColor: Colors.indigo,
+                selectedColor: Colors.white,
+                selectedBorderColor: Colors.indigo,
+                borderRadius: BorderRadius.circular(5.0),
+                children: [
+                  Container(
+                    width: 110.0,
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Business'),
                     ),
-                    Container(
-                      width: 110.0,
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Non-business'),
-                      ),
+                  ),
+                  Container(
+                    width: 110.0,
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Non-business'),
                     ),
-                  ],
-                  onPressed: (int index) {
-                  },
-                  isSelected: isSelected,
-                ),
-              ],
-            ),
-
-            SizedBox(height: 20.0),
-
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Trip Purpose'),
-            ),
-          ],
-        ),
+                  ),
+                ],
+                onPressed: (int index) {},
+                isSelected: isSelected,
+              ),
+            ],
+          ),
+          SizedBox(height: 20.0),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'Trip Purpose'),
+          ),
+        ],
+      ),
     ),
   );
 }
-
-

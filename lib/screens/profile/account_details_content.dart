@@ -29,6 +29,7 @@ class AccountDetailsContent extends StatelessWidget {
               Container(
                 width: 200.0,
                 child: TWFlatButton(
+                  inverted: false,
                   context: context,
                   buttonText: 'EDIT ACCOUNT',
                   onPressed: () {

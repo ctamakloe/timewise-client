@@ -88,6 +88,7 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
           _tripNotes(),
           _divider(),
           TWFlatButton(
+            inverted: false,
             context: context,
             buttonText: 'END TRIP',
             onPressed: () => Navigator.pop(context),

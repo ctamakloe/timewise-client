@@ -225,6 +225,7 @@ class TripDetailsContent extends StatelessWidget {
 
   TWFlatButton _statusButton(BuildContext context) {
     return TWFlatButton(
+      inverted: false,
         context: context,
         buttonText: this.trip.status == 'upcoming' ? 'START TRIP' : 'END TRIP',
         onPressed: () {

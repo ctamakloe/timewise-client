@@ -38,6 +38,7 @@ class TripStartScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.0,),
                 TWFlatButton(
+                  inverted: false,
                   context: context,
                   buttonText: 'START TRIP',
                   onPressed: () => Navigator.pop(context),

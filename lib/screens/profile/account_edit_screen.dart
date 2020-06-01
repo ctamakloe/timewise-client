@@ -35,6 +35,7 @@ class AccountEditScreen extends StatelessWidget {
           TWTextField(labelText: 'Gender', ),
           SizedBox(height: 40.0),
           TWFlatButton(
+            inverted: false,
               context: context,
               buttonText: 'SAVE',
               onPressed: () {

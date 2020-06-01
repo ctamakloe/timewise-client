@@ -25,7 +25,7 @@ class LegHeatMap extends StatelessWidget {
             ),
             // Start station label
             Align(
-              alignment: Alignment.bottomLeft,
+              alignment: Alignment(-1.0, .5),
               child: Container(
                   width: 200.0,
                   child: Text(
@@ -35,7 +35,7 @@ class LegHeatMap extends StatelessWidget {
             // End station label
             if (tripLeg.legType == 'arrival')
               Align(
-                alignment: Alignment.bottomRight,
+                alignment: Alignment(1.0, .5),
                 child: Container(
                     width: 200.0,
                     child: Text(
