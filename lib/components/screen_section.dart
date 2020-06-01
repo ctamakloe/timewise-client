@@ -22,7 +22,6 @@ class _ScreenSectionState extends State<ScreenSection> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-//      height: 600,
       decoration: BoxDecoration(
         color: Colors.white,
       ),
@@ -32,6 +31,7 @@ class _ScreenSectionState extends State<ScreenSection> {
           // header
           if (widget.sectionTitle != '') _buildSectionHeader(),
           // content
+
           widget.sectionContent,
         ],
       ),

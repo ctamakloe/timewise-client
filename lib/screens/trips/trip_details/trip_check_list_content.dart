@@ -24,6 +24,8 @@ class _TripChecklistContentState extends State<TripChecklistContent> {
   @override
   void initState() {
     // TODO: implement initState
+    super.initState();
+
     setState(() {
       for (int i = 0; i < 3; i++) {
         inputs.add(false);
@@ -39,31 +41,30 @@ class _TripChecklistContentState extends State<TripChecklistContent> {
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 200.0,
-        child: ListView.builder(
-            itemCount: inputs.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 200.0,
+      child: ListView.builder(
+          itemCount: inputs.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
 //                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: <Widget>[
-                    CheckboxListTile(
-                        checkColor: Colors.indigo,
-                        activeColor: Colors.white,
-                        value: inputs[index],
-                        title: Text(labels[index]),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        onChanged: (bool val) {
-                          _itemChange(val, index);
-                        })
-                  ],
-                ),
-              );
-            }),
-      ),
+              child: Column(
+                children: <Widget>[
+                  CheckboxListTile(
+                      checkColor: Colors.indigo,
+                      activeColor: Colors.white,
+                      value: inputs[index],
+                      title: Text(labels[index]),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (bool val) {
+                        _itemChange(val, index);
+                      })
+                ],
+              ),
+            );
+          }
+          ),
     );
   }
 }

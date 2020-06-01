@@ -12,39 +12,37 @@ class LegHeatMap extends StatelessWidget {
   Widget build(BuildContext context) {
     // compile a bunch of data columns to get the map for a leg
     return IntrinsicWidth(
-      child: IntrinsicHeight(
-        child: Container(
-          child: Stack(
-            children: [
-              // Chart
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  height: 125.0,
-                  child: _combineColumns(),
-                ),
+      child: Container(
+        child: Stack(
+          children: [
+            // Chart
+            Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                height: 125.0,
+                child: _combineColumns(),
               ),
-              // Start station label
+            ),
+            // Start station label
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                  width: 200.0,
+                  child: Text(
+                    this.tripLeg.startStation,
+                  )),
+            ),
+            // End station label
+            if (tripLeg.legType == 'arrival')
               Align(
-                alignment: Alignment.bottomLeft,
+                alignment: Alignment.bottomRight,
                 child: Container(
                     width: 200.0,
                     child: Text(
-                      this.tripLeg.startStation,
+                      this.tripLeg.endStation,
                     )),
               ),
-              // End station label
-              if (tripLeg.legType == 'arrival')
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                      width: 200.0,
-                      child: Text(
-                        this.tripLeg.endStation,
-                      )),
-                ),
-            ],
-          ),
+          ],
         ),
       ),
     );

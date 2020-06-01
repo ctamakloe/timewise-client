@@ -3,7 +3,6 @@ import 'package:time_wise_app/components/app_bar_title.dart';
 import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/components/trip_list.dart';
 import 'package:time_wise_app/models/screen_section_data.dart';
-import 'package:time_wise_app/models/trip.dart';
 
 class TripsListScreen extends StatefulWidget {
   final Map

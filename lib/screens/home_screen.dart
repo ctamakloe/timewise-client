@@ -14,6 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
         top: false,
@@ -62,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 const List<Destination> allDestinations = <Destination>[
   Destination('Trips', LineAwesomeIcons.train, TripsView()),
-  Destination('Plan', LineAwesomeIcons.plus_circle, WizardView()),
+  Destination('Planner', LineAwesomeIcons.calendar_plus, WizardView()),
   Destination('Profile', LineAwesomeIcons.user_circle, ProfileView()),
 ];
 

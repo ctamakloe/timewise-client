@@ -1,4 +1,17 @@
 class Station {
+  String code;
+  String name;
+
+  Station(this.code, this.name);
+
+  static List<Station> getStations() {
+    List<Station> list = [];
+    stations.forEach((key, value) {
+      list.add(Station(key, value));
+    });
+    return list;
+  }
+
   static final stations = {
     'NOT': 'Nottingham',
     'MIA': 'Manchester Airport',
@@ -46,8 +59,4 @@ class Station {
     'LTN': 'Luton Airport Parkway',
     'LEI': 'Leicester',
   };
-
-  static getStation(String code) {
-    return stations[code];
-  }
 }

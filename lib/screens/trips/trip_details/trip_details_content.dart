@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:charcode/html_entity.dart";
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:time_wise_app/components/detail_item.dart';
 import 'package:time_wise_app/components/icon_tile.dart';
 import 'package:time_wise_app/components/tw_flatbutton.dart';
 import 'package:time_wise_app/models/trip.dart';
@@ -57,95 +58,60 @@ class TripDetailsContent extends StatelessWidget {
           Text('RTN: ' + this.trip.description),
           SizedBox(height: 15.0),
 // schedule
-          IntrinsicHeight(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Mon, 25 May',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Mon, 25 May',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                ),
-                VerticalDivider(
-                  thickness: 2.0,
-                  color: Colors.grey.shade100,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      this.trip.schedule,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                ],
+              ),
+              VerticalDivider(
+                thickness: 2.0,
+                color: Colors.grey.shade100,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    this.trip.schedule,
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
           SizedBox(
             height: 40,
           ),
 // other details
 //          Divider(thickness: 1.0, height: 40.0,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(flex: 1, child: Icon(Icons.timer, size: 25)),
-              Expanded(
-                flex: 4,
-                child: Text(this.trip.status == 'complete'
-                    ? 'Duration'
-                    : 'Expected Duration'),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  '1h 50m',
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
-              )
-            ],
+          DetailItemText(
+            detailIcon: Icons.timer,
+            detailLabel: this.trip.status == 'complete'
+                ? 'Duration'
+                : 'Expected Duration',
+            detailValue: '1h 50m',
           ),
-          Divider(
-            thickness: 1.0,
-            height: 40.0,
+          DetailItemDivider(),
+          DetailItemText(
+            detailIcon: this.trip.purpose == 'leisure'
+                ? LineAwesomeIcons.theater_masks
+                : LineAwesomeIcons.briefcase,
+            detailLabel: 'Trip Type',
+            detailValue: this.trip.purpose.capitalize(),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Icon(
-                  this.trip.purpose == 'leisure'
-                      ? LineAwesomeIcons.theater_masks
-                      : LineAwesomeIcons.briefcase,
-                  size: 25,
-                ),
-              ),
-              Expanded(flex: 4, child: Text('Trip Purpose')),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  this.trip.purpose.capitalize(),
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
-              )
-            ],
-          ),
-          Divider(
-            thickness: 1.0,
-            height: 40.0,
-          ),
+          DetailItemDivider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -166,10 +132,7 @@ class TripDetailsContent extends StatelessWidget {
               ),
             ],
           ),
-          Divider(
-            thickness: 1.0,
-            height: 40.0,
-          ),
+          DetailItemDivider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -221,10 +184,7 @@ class TripDetailsContent extends StatelessWidget {
               ),
             ],
           ),
-          Divider(
-            thickness: 1.0,
-            height: 40.0,
-          ),
+          DetailItemDivider(),
 // start/stop trip button
           if (this.trip.status != 'complete') _statusSection(context),
         ],

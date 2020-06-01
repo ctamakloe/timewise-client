@@ -245,31 +245,29 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
       child: Scrollbar(
         child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: IntrinsicWidth(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _activityTile('Eat or drink', LineAwesomeIcons.hamburger),
-                  _activityTile('Make phone calls or send messages',
-                      LineAwesomeIcons.mobile_phone),
-                  _activityTile('Read', LineAwesomeIcons.book_open),
-                  _activityTile(
-                      'Write or edit documents', LineAwesomeIcons.edit),
-                  _activityTile(
-                      'Browse the Internet (social media, travel info, etc.)',
-                      LineAwesomeIcons.globe),
-                  _activityTile('Watch videos', LineAwesomeIcons.film),
-                  _activityTile(
-                      'Listen to music, podcasts, audio books or radio',
-                      LineAwesomeIcons.headphones),
-                  _activityTile('Play games', LineAwesomeIcons.gamepad),
-                  _activityTile('Take a nap', LineAwesomeIcons.bed),
-                  _activityTile('Talk to other passengers',
-                      LineAwesomeIcons.user_friends),
-                  _activityTile('Care for other passengers',
-                      LineAwesomeIcons.universal_access),
-                ],
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _activityTile('Eat or drink', LineAwesomeIcons.hamburger),
+                _activityTile('Make phone calls or send messages',
+                    LineAwesomeIcons.mobile_phone),
+                _activityTile('Read', LineAwesomeIcons.book_open),
+                _activityTile(
+                    'Write or edit documents', LineAwesomeIcons.edit),
+                _activityTile(
+                    'Browse the Internet (social media, travel info, etc.)',
+                    LineAwesomeIcons.globe),
+                _activityTile('Watch videos', LineAwesomeIcons.film),
+                _activityTile(
+                    'Listen to music, podcasts, audio books or radio',
+                    LineAwesomeIcons.headphones),
+                _activityTile('Play games', LineAwesomeIcons.gamepad),
+                _activityTile('Take a nap', LineAwesomeIcons.bed),
+                _activityTile('Talk to other passengers',
+                    LineAwesomeIcons.user_friends),
+                _activityTile('Care for other passengers',
+                    LineAwesomeIcons.universal_access),
+              ],
             )),
       ),
     );

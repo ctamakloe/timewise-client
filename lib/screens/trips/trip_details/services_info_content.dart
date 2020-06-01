@@ -12,6 +12,23 @@ class ServicesInfoContent extends StatelessWidget {
 
   final Trip trip;
 
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      height: 100.0,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        _serviceInfoTile(context, LineAwesomeIcons.wifi, 'How to access WiFi'),
+        _serviceInfoTile(context, LineAwesomeIcons.plug, 'Where to find charging points'),
+        _serviceInfoTile(context, LineAwesomeIcons.utensils, 'Catering info'),
+        _serviceInfoTile(context, LineAwesomeIcons.toilet, 'Toilet information'),
+        _serviceInfoTile(context, LineAwesomeIcons.accessible_icon, 'Accessibility options'),
+        _serviceInfoTile(context, LineAwesomeIcons.biking, 'Bike storage'),
+      ]),
+    );
+  }
+
   Widget _serviceInfoTile(BuildContext context, IconData icon, String info) {
     return IconTile(
       onTap: () => _showServiceInfo(context, info),
@@ -28,21 +45,5 @@ class ServicesInfoContent extends StatelessWidget {
             child: Text(info),
           );
         });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      height: 100.0,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        _serviceInfoTile(context, LineAwesomeIcons.wifi, 'How to access WiFi'),
-        _serviceInfoTile(context, LineAwesomeIcons.plug, 'Where to find charging points'),
-        _serviceInfoTile(context, LineAwesomeIcons.utensils, 'Catering info'),
-        _serviceInfoTile(context, LineAwesomeIcons.toilet, 'Toilet information'),
-        _serviceInfoTile(context, LineAwesomeIcons.accessible_icon, 'Accessibility options'),
-        _serviceInfoTile(context, LineAwesomeIcons.biking, 'Bike storage'),
-      ]),
-    );
   }
 }

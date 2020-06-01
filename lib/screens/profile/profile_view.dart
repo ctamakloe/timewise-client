@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:time_wise_app/screens/profile/profile_screen.dart';
+import 'package:time_wise_app/screens/profile/account_edit_screen.dart';
+import 'package:time_wise_app/screens/profile/profile_home_screen.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({
@@ -21,7 +22,9 @@ class _ProfileViewState extends State<ProfileView> {
           builder: (BuildContext context) {
             switch (settings.name) {
               case '/':
-                return ProfileScreen();
+                return ProfileHomeScreen();
+              case '/accountEdit':
+                return AccountEditScreen();
             }
           },
         );

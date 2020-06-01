@@ -34,6 +34,9 @@ dependencies:
   timeline: ^0.0.1
   line_awesome_flutter: ^1.0.0
   flutter_icons: ^1.1.0
+  autocomplete_textfield: ^1.7.3
+  datetime_picker_formfield: ^1.0.0
+
 
 dev_dependencies:
   flutter_test:

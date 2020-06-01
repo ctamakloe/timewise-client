@@ -30,17 +30,22 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
         sectionAction: SectionAction(),
         sectionContent: TripDetailsContent(trip: widget.trip),
       ),
-      ScreenSectionData(
+    ];
+
+    if (widget.trip.status != 'complete') {
+      sectionsData.add(ScreenSectionData(
         sectionTitle: 'AVAILABLE SERVICES',
         sectionAction: SectionAction(),
         sectionContent: ServicesInfoContent(trip: widget.trip),
-      ),
-      ScreenSectionData(
+      ));
+
+      sectionsData.add(ScreenSectionData(
         sectionTitle: 'SIGNAL COVERAGE',
         sectionAction: SectionAction(),
         sectionContent: CoverageInfoContent(trip: widget.trip),
-      ),
-      ScreenSectionData(
+      ));
+
+      sectionsData.add(ScreenSectionData(
           sectionTitle: 'PREVIOUS TRIPS',
           sectionAction: SectionAction(
               title: 'Show more',
@@ -49,13 +54,15 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                 'title': 'Previous Trips',
                 'trips': Trip.sampleCompleteTrips
               }),
-          sectionContent: TripList(trips: Trip.sampleCompleteTrips.take(2).toList())),
-      ScreenSectionData(
+          sectionContent:
+              TripList(trips: Trip.sampleCompleteTrips.take(2).toList())));
+
+      sectionsData.add(ScreenSectionData(
         sectionTitle: 'TRIP CHECKLIST',
         sectionAction: SectionAction(),
         sectionContent: TripChecklistContent(trip: widget.trip),
-      ),
-    ];
+      ));
+    }
 
     return Scaffold(
         appBar: PreferredSize(

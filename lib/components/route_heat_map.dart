@@ -75,6 +75,7 @@ class RouteHeatMap extends StatelessWidget {
     );
   }
 
+/*
   _stationNameContainer() {
     return Container(
       height: 50.0,
@@ -84,6 +85,7 @@ class RouteHeatMap extends StatelessWidget {
       ),
     );
   }
+*/
 
   // COLUMNS
 
