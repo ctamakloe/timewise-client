@@ -15,28 +15,27 @@ class TrainScheduleTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(width: 1.0, color: Colors.grey[100]),
+          bottom: BorderSide(width: 1.0, color: Colors.grey[200]),
         )
       ),
       padding: const EdgeInsets.symmetric(vertical: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(LineAwesomeIcons.circle),
-          _stationInfo(schedule.startStation.name,
+          _stationTime(schedule.startStation.name,
               DateFormat.Hm().format(schedule.departureTime)),
           Icon(
             Icons.arrow_forward,
             color: Colors.grey,
           ),
-          _stationInfo(schedule.endStation.name,
+          _stationTime(schedule.endStation.name,
               DateFormat.Hm().format(schedule.arrivalTime)),
         ],
       ),
     );
   }
 
-  _stationInfo(String stationName, String time) {
+  _stationTime(String stationName, String time) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

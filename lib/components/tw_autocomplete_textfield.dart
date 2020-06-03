@@ -34,7 +34,7 @@ class TWStationAutoCompleteTextField extends StatelessWidget {
         return a.name.compareTo(b.name);
       },
       itemSubmitted: (item) {
-        formController.text = item.name;
+        formController.text = item.code;
       },
       itemBuilder: (context, item) {
         return Container(

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:time_wise_app/components/detail_item.dart';
 import 'package:time_wise_app/components/tw_flatbutton.dart';
 
 class AccountDetailsContent extends StatelessWidget {

@@ -4,12 +4,16 @@ import 'package:intl/intl.dart';
 
 class TWDateField extends StatelessWidget {
   final format = DateFormat("MMM d, y");
-
+  final TextEditingController formController;
   final String labelText;
 
   TWDateField({
-    this.labelText,
-  });
+    Key key,
+    @required TextEditingController formController,
+    @required String labelText,
+  })  : formController = formController,
+        labelText = labelText,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +48,16 @@ class TWDateField extends StatelessWidget {
 
 class TWTimeField extends StatelessWidget {
   final format = DateFormat.Hm();
-
+  final TextEditingController formController;
   final String labelText;
 
   TWTimeField({
-    this.labelText,
-  });
+    Key key,
+    @required TextEditingController formController,
+    @required String labelText,
+  })  : formController = formController,
+        labelText = labelText,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,17 +71,17 @@ class TWTimeField extends StatelessWidget {
         cursorColor: Colors.indigo,
         onShowPicker: (context, currentValue) async {
           final time = await showTimePicker(
-            context: context,
-            initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-            builder: (BuildContext context, Widget child) {
-              return Theme(
-                data: ThemeData(
-                  primarySwatch: Colors.indigo,
-                ),
-                child: child,
-              );
-            }
-          );
+              context: context,
+              initialTime:
+                  TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+              builder: (BuildContext context, Widget child) {
+                return Theme(
+                  data: ThemeData(
+                    primarySwatch: Colors.indigo,
+                  ),
+                  child: child,
+                );
+              });
           return DateTimeField.convert(time);
         },
       ),
