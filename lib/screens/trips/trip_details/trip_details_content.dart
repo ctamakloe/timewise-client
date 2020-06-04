@@ -55,7 +55,7 @@ class TripDetailsContent extends StatelessWidget {
           ),
           SizedBox(height: 15.0),
 // description
-          Text('RTN: ' + this.trip.description),
+          Text(this.trip.purposeDescription),
           SizedBox(height: 15.0),
 // schedule
           Row(
@@ -105,11 +105,11 @@ class TripDetailsContent extends StatelessWidget {
           ),
           DetailItemDivider(),
           DetailItemText(
-            detailIcon: this.trip.purpose == 'leisure'
-                ? LineAwesomeIcons.theater_masks
-                : LineAwesomeIcons.briefcase,
+            detailIcon: this.trip.isBusiness()
+                ? LineAwesomeIcons.briefcase
+                : LineAwesomeIcons.theater_masks,
             detailLabel: 'Trip Type',
-            detailValue: this.trip.purpose.capitalize(),
+            detailValue: this.trip.type.capitalize(),
           ),
           DetailItemDivider(),
           Row(

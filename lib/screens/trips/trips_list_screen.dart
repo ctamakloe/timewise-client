@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:time_wise_app/components/app_bar_title.dart';
 import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/components/trip_list.dart';
@@ -22,8 +23,17 @@ class _TripsListScreenState extends State<TripsListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.0),
-          child: TimeWiseAppBar(title: widget.arguments['title'])),
+        preferredSize: Size.fromHeight(60.0),
+        child: TimeWiseAppBar(title: widget.arguments['title'], actions: [
+          // action button
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.pushNamed(context, '/tripPlanner');
+            },
+          ),
+        ]),
+      ),
       body: ScreenSection(
           sectionTitle: '',
           sectionAction: SectionAction(),

@@ -1,10 +1,14 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:time_wise_app/components/train_schedule_tile.dart';
 import 'package:time_wise_app/components/tw_autocomplete_textfield.dart';
-import 'package:time_wise_app/components/tw_datetime.dart';
 import 'package:time_wise_app/components/tw_flatbutton.dart';
 import 'package:time_wise_app/components/tw_toggle_buttons.dart';
-import 'package:time_wise_app/models/train_schedule.dart';
+import 'package:time_wise_app/models/api/api_train_schedule.dart';
+import 'package:time_wise_app/models/station.dart';
+import 'package:time_wise_app/services/train_schedule_service.dart';
+import 'package:time_wise_app/services/trip_service.dart';
 
 class WizardContent extends StatefulWidget {
   @override
@@ -19,50 +23,89 @@ class _WizardContentState extends State<WizardContent> {
 
   // form => step 1
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _fromStationController =
-      TextEditingController(text: '');
-  TextEditingController _toStationController = TextEditingController(text: '');
-  TextEditingController _dateController = TextEditingController(text: '');
-  TextEditingController _timeController = TextEditingController(text: '');
+  TextEditingController _fromStationController = TextEditingController();
+  TextEditingController _toStationController = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
+  TextEditingController _timeController = TextEditingController();
+
   // form => step 2
   int _selectedScheduleId = -1;
+
   // form => step 3
-  TextEditingController _purposeController = TextEditingController(text: '');
-  List<bool> _isSelectedDir = [false, false];
-  List<bool> _isSelectedType = [false, false];
+  TextEditingController _purposeController = TextEditingController();
+  String _tripType;
+  String _travelDirection;
+  List<bool> _isSelectedDir = [false, false]; //[outbound, return]
+  List<bool> _isSelectedType = [false, false]; // non-business, business
 
   // data
-  List<TrainSchedule> _scheduleList = TrainSchedule.getTrainSchedules(); // TODO: get from server using date + time
+  Station startStation;
+  Station endStation;
 
-  // planner variables :
-  // originStationCode
-  // destinationStationCode
-  // * date + time => go to server and get trainSchedules
-  // trainSchedule: departureTime, arrivalTime, id
-  // travelDirection
-  // tripType
-  // tripPurpose
+  bool isFirstStep() => _currentStep == 0;
 
-  bool firstStep() => _currentStep == 0;
+  bool isLastStep() => _currentStep == _steps.length - 1;
 
-  bool lastStep() => _currentStep == _steps.length - 1;
+  int nextStep() => _currentStep + 1;
+
+  int lastStep() => _steps.length;
 
   next() {
-    _currentStep + 1 != _steps.length
-        ? goTo(_currentStep + 1)
-        : setState(() => _complete = true);
+//    _currentStep + 1 != _steps.length
+//        ? goTo(_currentStep + 1)
+//        : setState(() => _complete = true);
+
+    if (nextStep() != lastStep()) {
+      goTo(nextStep());
+    } else {
+//      trip = TripService.createTrip(_tripFormData)
+//      if this returns a trip, navigate to trip page
+//      else show message
+      TripFormData _formData = TripFormData();
+      _formData.tripPurpose = _purposeController.text;
+      _formData.tripType = _tripType;
+      _formData.travelDirection = _travelDirection;
+      _formData.scheduleId = _selectedScheduleId;
+
+      var tripService = TripService();
+
+      tripService.createTrip(_formData).then((value) {
+        setState(() {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/tripDetails', ModalRoute.withName('/'),
+              arguments: value);
+          _complete = true;
+        });
+      });
+    }
   }
 
   goTo(int step) {
     setState(() {
+      if (_currentStep == 0) _scheduleList = []; // clear schedules
+
       _currentStep = step;
     });
   }
 
   cancel() {
+    if (_currentStep == 0) resetForm();
+
     if (_currentStep > 0) {
       goTo(_currentStep - 1);
     }
+  }
+
+  resetForm() {
+    _formKey.currentState.reset();
+    _scheduleList = [];
+    _fromStationController.clear();
+    _toStationController.clear();
+    _timeController.clear();
+    _dateController.clear();
+    _purposeController.clear();
+    _travelDirection = '';
+    _tripType = '';
   }
 
   @override
@@ -86,7 +129,7 @@ class _WizardContentState extends State<WizardContent> {
                 currentStep: _currentStep,
                 onStepContinue: next,
                 onStepCancel: cancel,
-                onStepTapped: (step) => goTo(step),
+//                onStepTapped: (step) => goTo(step),
                 controlsBuilder: (BuildContext context,
                         {VoidCallback onStepContinue,
                         VoidCallback onStepCancel}) =>
@@ -99,7 +142,7 @@ class _WizardContentState extends State<WizardContent> {
                       TWFlatButton(
                         inverted: false,
                         context: context,
-                        buttonText: lastStep() ? 'SAVE' : 'NEXT',
+                        buttonText: isLastStep() ? 'CREATE TRIP PLAN' : 'NEXT',
                         onPressed: onStepContinue,
                       ),
                       SizedBox(
@@ -108,7 +151,7 @@ class _WizardContentState extends State<WizardContent> {
                       TWFlatButton(
                         inverted: true,
                         context: context,
-                        buttonText: firstStep() ? 'CANCEL' : 'BACK',
+                        buttonText: isFirstStep() ? 'CLEAR' : 'BACK',
                         onPressed: onStepCancel,
                       ),
                     ],
@@ -121,6 +164,9 @@ class _WizardContentState extends State<WizardContent> {
       ),
     );
   }
+
+  DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+  DateFormat _timeFormat = DateFormat.Hm();
 
   _buildStepOne() {
     return Step(
@@ -144,17 +190,68 @@ class _WizardContentState extends State<WizardContent> {
                 children: [
                   Flexible(
                     flex: 1,
-                    child: TWDateField(
-                      labelText: 'Date',
-                      formController: _dateController,
+                    child: DateTimeField(
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(0, 30, 10, 10),
+                        labelText: 'Date',
+                      ),
+                      initialValue: DateTime.now(),
+                      format: _dateFormat,
+                      cursorColor: Colors.indigo,
+                      controller: _dateController,
+                      onChanged: (value) =>
+                          _dateController.text = _dateFormat.format(value),
+                      onShowPicker: (context, currentValue) {
+                        return showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1900),
+                          initialDate: currentValue ?? DateTime.now(),
+                          lastDate: DateTime(2100),
+                          builder: (BuildContext context, Widget child) {
+                            return Theme(
+                              data: ThemeData(
+                                primarySwatch: Colors.indigo,
+                              ),
+                              child: child,
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
                   SizedBox(width: 20.0),
                   Flexible(
                     flex: 1,
-                    child: TWTimeField(
-                      labelText: 'Time',
-                      formController: _timeController,
+                    child: DateTimeField(
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(0, 30, 10, 10),
+                        labelText: 'Time',
+                      ),
+                      initialValue: DateTime.now(),
+                      format: _timeFormat,
+                      cursorColor: Colors.indigo,
+                      controller: _timeController,
+                      onChanged: (value) =>
+                          _timeController.text = _timeFormat.format(value),
+                      onShowPicker: (context, currentValue) async {
+                        final time = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(
+                                currentValue ?? DateTime.now()),
+                            builder: (BuildContext context, Widget child) {
+                              return Theme(
+                                data: ThemeData(
+                                  primarySwatch: Colors.indigo,
+                                ),
+                                child: child,
+                              );
+                            });
+//                        if (time != null) return DateTimeField.convert(time);
+
+                        return DateTime.now();
+                      },
                     ),
                   ),
                 ],
@@ -166,44 +263,86 @@ class _WizardContentState extends State<WizardContent> {
     );
   }
 
+  List<APITrainSchedule> _scheduleList = [];
+
+  _buildScheduleList(list) {
+    return Container(
+      height: 300.0,
+      child: Scrollbar(
+        child: ListView.builder(
+            itemCount: list.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  setState(() {
+                    _selectedScheduleId = list[index].id;
+                  });
+                },
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: Radio(
+                        value: list[index].id,
+                        groupValue: _selectedScheduleId,
+//                          onChanged: (value) => () { },
+                      ),
+                    ),
+                    Flexible(
+                        flex: 5,
+                        child: TrainScheduleTile(
+                          schedule: list[index].toTrainSchedule(),
+                        ))
+                  ],
+                ),
+              );
+            }),
+      ),
+    );
+  }
+
   _buildStepTwo() {
     return Step(
-        title: const Text('Select Train'),
-        isActive: _currentStep == 1 ? true : false,
-        state: _currentStep == 1 ? StepState.editing : StepState.complete,
-        content: Container(
-          height: 300.0,
-          child: Scrollbar(
-            child: ListView.builder(
-                itemCount: _scheduleList.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        _selectedScheduleId = _scheduleList[index].id;
-                      });
-                    },
-                    child: Row(
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: Radio(
-                            value: _scheduleList[index].id,
-                            groupValue: _selectedScheduleId,
-//                          onChanged: (value) => () { },
-                          ),
-                        ),
-                        Flexible(
-                            flex: 5,
-                            child: TrainScheduleTile(
-                              schedule: _scheduleList[index],
-                            ))
-                      ],
+      title: const Text('Select Train'),
+      isActive: _currentStep == 1 ? true : false,
+      state: _currentStep == 1 ? StepState.editing : StepState.complete,
+      content: _scheduleList.isNotEmpty
+          ? _buildScheduleList(_scheduleList)
+          : FutureBuilder(
+              future: TrainScheduleService().getTrainSchedules(
+                _fromStationController.text,
+                _toStationController.text,
+                _dateController.text,
+                _timeController.text,
+              ),
+//        future: TrainScheduleService.getTrainSchedules(
+//                _fromStationController.text,
+//                _toStationController.text,
+//                _dateController.text,
+//                _timeController.text,
+//              ),
+              builder: (context, schedulesSnap) {
+                if (schedulesSnap.data == null)
+                  return Container(
+                    height: 300.0,
+                    child: Center(
+                      child: Text(
+                        'Unable to retrieve train schedules!',
+                        style: TextStyle(fontSize: 18.0),
+                      ),
                     ),
                   );
-                }),
-          ),
-        ));
+
+                if (schedulesSnap.connectionState == ConnectionState.none &&
+                    schedulesSnap.hasData == null) {
+                  return Container();
+                }
+
+                _scheduleList = schedulesSnap.data;
+                return _buildScheduleList(_scheduleList);
+              },
+            ),
+    );
   }
 
   _buildStepThree() {
@@ -261,6 +400,8 @@ class _WizardContentState extends State<WizardContent> {
                           _isSelectedDir[buttonIndex] = false;
                         }
                       }
+                      this._travelDirection =
+                          _isSelectedDir[0] == true ? 'outbound' : 'return';
                     });
                   },
                   isSelected: _isSelectedDir,
@@ -284,11 +425,11 @@ class _WizardContentState extends State<WizardContent> {
                   borderRadius: BorderRadius.circular(5.0),
                   children: [
                     TWToggleButton(
-                      child: Text('Business'),
+                      child: Text('Non-Business'),
                       width: 110.0,
                     ),
                     TWToggleButton(
-                      child: Text('Non-Business'),
+                      child: Text('Business'),
                       width: 110.0,
                     ),
                   ],
@@ -303,6 +444,9 @@ class _WizardContentState extends State<WizardContent> {
                           _isSelectedType[buttonIndex] = false;
                         }
                       }
+                      this._tripType = _isSelectedType[0] == true
+                          ? 'non-business'
+                          : 'business';
                     });
                   },
                   isSelected: _isSelectedType,

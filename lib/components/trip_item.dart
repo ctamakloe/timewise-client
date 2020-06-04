@@ -30,10 +30,11 @@ class _TripListItemState extends State<TripListItem> {
           children: [
             Expanded(
               flex: 1,
-              child: Icon(widget.trip.purpose == 'leisure'
-                  ? LineAwesomeIcons.theater_masks
-                  : LineAwesomeIcons.briefcase,
-                  size: 30.0,
+              child: Icon(
+                widget.trip.isBusiness()
+                    ? LineAwesomeIcons.briefcase
+                    : LineAwesomeIcons.theater_masks,
+                size: 30.0,
               ),
 //              child: Image(
 //                  height: 30.0,
@@ -47,7 +48,7 @@ class _TripListItemState extends State<TripListItem> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.trip.description),
+                    Text(widget.trip.purpose),
                     SizedBox(
                       height: 5.0,
                     ),

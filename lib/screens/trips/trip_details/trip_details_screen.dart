@@ -26,7 +26,7 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
   Widget build(BuildContext context) {
     List<ScreenSectionData> sectionsData = <ScreenSectionData>[
       ScreenSectionData(
-        sectionTitle: 'TRIP DETAILS',
+        sectionTitle: '',
         sectionAction: SectionAction(),
         sectionContent: TripDetailsContent(trip: widget.trip),
       ),
@@ -46,6 +46,12 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
       ));
 
       sectionsData.add(ScreenSectionData(
+        sectionTitle: 'TRIP CHECKLIST',
+        sectionAction: SectionAction(),
+        sectionContent: TripChecklistContent(trip: widget.trip),
+      ));
+
+      sectionsData.add(ScreenSectionData(
           sectionTitle: 'PREVIOUS TRIPS',
           sectionAction: SectionAction(
               title: 'Show more',
@@ -56,12 +62,6 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
               }),
           sectionContent:
               TripList(trips: Trip.sampleCompleteTrips.take(2).toList())));
-
-      sectionsData.add(ScreenSectionData(
-        sectionTitle: 'TRIP CHECKLIST',
-        sectionAction: SectionAction(),
-        sectionContent: TripChecklistContent(trip: widget.trip),
-      ));
     }
 
     return Scaffold(

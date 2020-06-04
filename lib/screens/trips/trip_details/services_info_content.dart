@@ -18,14 +18,20 @@ class ServicesInfoContent extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10.0),
       height: 100.0,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        _serviceInfoTile(context, LineAwesomeIcons.wifi, 'How to access WiFi'),
-        _serviceInfoTile(context, LineAwesomeIcons.plug, 'Where to find charging points'),
-        _serviceInfoTile(context, LineAwesomeIcons.utensils, 'Catering info'),
-        _serviceInfoTile(context, LineAwesomeIcons.toilet, 'Toilet information'),
-        _serviceInfoTile(context, LineAwesomeIcons.accessible_icon, 'Accessibility options'),
-        _serviceInfoTile(context, LineAwesomeIcons.biking, 'Bike storage'),
-      ]),
+      child: Column(
+        children: [
+          Text('Your train provider is East Midlands Railways'),
+          SizedBox(height: 20.0),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            _serviceInfoTile(context, LineAwesomeIcons.wifi, 'How to access WiFi'),
+            _serviceInfoTile(context, LineAwesomeIcons.plug, 'Where to find charging points'),
+            _serviceInfoTile(context, LineAwesomeIcons.utensils, 'Catering info'),
+            _serviceInfoTile(context, LineAwesomeIcons.toilet, 'Toilet information'),
+            _serviceInfoTile(context, LineAwesomeIcons.accessible_icon, 'Accessibility options'),
+            _serviceInfoTile(context, LineAwesomeIcons.biking, 'Bike storage'),
+          ]),
+        ],
+      ),
     );
   }
 

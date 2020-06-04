@@ -2,12 +2,12 @@ class Station {
   String code;
   String name;
 
-  Station(this.code, this.name);
+  Station({this.code, this.name});
 
   static List<Station> getStations() {
     List<Station> list = [];
     stations.forEach((key, value) {
-      list.add(Station(key, value));
+      list.add(Station(code: key, name: value));
     });
     return list;
   }

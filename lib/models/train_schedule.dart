@@ -7,9 +7,14 @@ class TrainSchedule {
   final DateTime arrivalTime;
   final DateTime departureTime;
 
-  TrainSchedule(this.id, this.startStation, this.endStation, this.departureTime,
-      this.arrivalTime);
+  TrainSchedule(
+      {this.id,
+      this.startStation,
+      this.endStation,
+      this.departureTime,
+      this.arrivalTime});
 
+/*
   static List<TrainSchedule> getTrainSchedules() {
     List<TrainSchedule> list = [];
 
@@ -49,5 +54,5 @@ class TrainSchedule {
         DateTime.now().add(Duration(hours: 8, minutes: 30))));
 
     return list;
-  }
+  }*/
 }

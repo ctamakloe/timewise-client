@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:time_wise_app/screens/profile/profile_view.dart';
 import 'package:time_wise_app/screens/trips/trips_view.dart';
+import 'package:time_wise_app/screens/wizard/wizard_screen.dart';
 import 'package:time_wise_app/screens/wizard/wizard_view.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -61,9 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-const List<Destination> allDestinations = <Destination>[
+
+List<Destination> allDestinations = <Destination>[
   Destination('Trips', LineAwesomeIcons.train, TripsView()),
-  Destination('Planner', LineAwesomeIcons.calendar_plus, WizardView()),
+//  Destination('Planner', LineAwesomeIcons.calendar_plus, WizardScreen()),
   Destination('Profile', LineAwesomeIcons.user_circle, ProfileView()),
 ];
 

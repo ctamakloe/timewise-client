@@ -6,8 +6,9 @@ class Trip {
   String destination;
   String departsAt;
   String arrivesAt;
+  String type;
   String purpose;
-  String description;
+  String travelDirection;
   String status;
   List<TripLeg> tripLegs = sampleTripLegs;
 
@@ -17,8 +18,9 @@ class Trip {
       this.destination,
       this.departsAt,
       this.arrivesAt,
+      this.type,
       this.purpose,
-      this.description,
+      this.travelDirection,
       this.status}) {
 //    initializeDateFormatting('de_DE', null).then(formatDates);
   }
@@ -33,14 +35,21 @@ class Trip {
 
   String get date => DateFormat.yMMMMd().format(DateTime.parse(departsAt));
 
+  bool isBusiness() => this.type == 'business';
+
+  bool isOutbound() => this.travelDirection == 'outbound';
+
+  String get purposeDescription => '${this.isOutbound() ? 'RTN: ' :'' } ${this.purpose}';
+
   Trip.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     origin = json['origin'];
     destination = json['destination'];
     departsAt = json['departs_at'];
     arrivesAt = json['arrives_at'];
+    type = json['trip_type'];
     purpose = json['purpose'];
-    description = json['description'];
+    travelDirection = json['travel_direction'];
     status = json['status'];
   }
 
@@ -51,8 +60,9 @@ class Trip {
     data['destination'] = this.destination;
     data['departs_at'] = this.departsAt;
     data['arrives_at'] = this.arrivesAt;
+    data['trip_type'] = this.type;
     data['purpose'] = this.purpose;
-    data['description'] = this.description;
+    data['travel_direction'] = this.travelDirection;
     data['status'] = this.status;
     return data;
   }
@@ -148,8 +158,8 @@ List<Map<String, Object>> upcomingTripsJson = [
     "destination": "London St Pancras International",
     "departs_at": "2020-06-02T11:05:46.120Z",
     "arrives_at": "2000-01-01T14:05:46.120Z",
-    "purpose": "leisure",
-    "description": "Visit Sean at Uni",
+    "trip_type": "non-business",
+    "purpose": "Visit Sean at Uni",
     "status": "in-progress"
   },
 ];
@@ -161,8 +171,8 @@ List<Map<String, Object>> inProgressTripsJson = [
     "destination": "nottingham",
     "departs_at": "2020-12-25T18:15:46.120Z",
     "arrives_at": "2020-12-25T20:25:46.120Z",
-    "purpose": "business",
-    "description": "Return: Meeting at ABC Head Office",
+    "trip_type": "business",
+    "purpose": "Return: Meeting at ABC Head Office",
     "status": "upcoming"
   },
   {
@@ -171,8 +181,8 @@ List<Map<String, Object>> inProgressTripsJson = [
     "destination": "Nottingham",
     "departs_at": "2020-12-25T18:15:46.120Z",
     "arrives_at": "2020-12-25T20:25:46.120Z",
-    "purpose": "leisure",
-    "description": "Vegan meet-up in Notts",
+    "trip_type": "leisure",
+    "purpose": "Vegan meet-up in Notts",
     "status": "upcoming"
   },
   {
@@ -181,8 +191,8 @@ List<Map<String, Object>> inProgressTripsJson = [
     "destination": "Nottingham",
     "departs_at": "2020-12-25T18:15:46.120Z",
     "arrives_at": "2020-12-25T20:25:46.120Z",
-    "purpose": "business",
-    "description": "SXSW Conference",
+    "trip_type": "business",
+    "purpose": "SXSW Conference",
     "status": "upcoming"
   }
 ];
@@ -196,8 +206,8 @@ List<Map<String, Object>> completeTripsJson = [
     "destination": "London St Pancras International",
     "departs_at": "2020-06-02T11:05:46.120Z",
     "arrives_at": "2000-01-01T14:05:46.120Z",
-    "purpose": "leisure",
-    "description": "Visit Sean at Uni",
+    "trip_type": "leisure",
+    "purpose": "Visit Sean at Uni",
     "status": "complete"
   },
   {
@@ -206,8 +216,8 @@ List<Map<String, Object>> completeTripsJson = [
     "destination": "London St Pancras International",
     "departs_at": "2020-05-25T07:10:46.120Z",
     "arrives_at": "2000-01-01T09:05:46.120Z",
-    "purpose": "business",
-    "description": "Meeting at ABC head office",
+    "trip_type": "business",
+    "purpose": "Meeting at ABC head office",
     "status": "complete"
   },
   {
@@ -216,8 +226,8 @@ List<Map<String, Object>> completeTripsJson = [
     "destination": "nottingham",
     "departs_at": "2020-12-25T18:15:46.120Z",
     "arrives_at": "2020-12-25T20:25:46.120Z",
-    "purpose": "business",
-    "description": "Return: Meeting at ABC Head Office",
+    "trip_type": "business",
+    "purpose": "Return: Meeting at ABC Head Office",
     "status": "complete"
   },
   {
@@ -226,8 +236,8 @@ List<Map<String, Object>> completeTripsJson = [
     "destination": "Nottingham",
     "departs_at": "2020-12-25T18:15:46.120Z",
     "arrives_at": "2020-12-25T20:25:46.120Z",
-    "purpose": "leisure",
-    "description": "Vegan meet-up in Notts",
+    "trip_type": "leisure",
+    "purpose": "Vegan meet-up in Notts",
     "status": "complete"
   },
   {
@@ -236,8 +246,8 @@ List<Map<String, Object>> completeTripsJson = [
     "destination": "Nottingham",
     "departs_at": "2020-12-25T18:15:46.120Z",
     "arrives_at": "2020-12-25T20:25:46.120Z",
-    "purpose": "business",
-    "description": "SXSW Conference",
+    "trip_type": "business",
+    "purpose": "SXSW Conference",
     "status": "complete"
   }
 ];
