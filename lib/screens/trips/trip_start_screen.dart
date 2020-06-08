@@ -4,6 +4,7 @@ import 'package:time_wise_app/components/eval_question.dart';
 import 'package:time_wise_app/components/rating_scale.dart';
 import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/components/tw_flatbutton.dart';
+import 'package:time_wise_app/components/tw_radiobutton_question.dart';
 import 'package:time_wise_app/models/screen_section_data.dart';
 import 'package:time_wise_app/models/trip.dart';
 import 'package:time_wise_app/screens/trips/trip_details/trip_details_screen.dart';
@@ -23,6 +24,7 @@ class TripStartScreen extends StatefulWidget {
 
 class _TripStartScreenState extends State<TripStartScreen> {
   Trip trip;
+  int _selectedPrepLevel = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -40,24 +42,26 @@ class _TripStartScreenState extends State<TripStartScreen> {
             padding: const EdgeInsets.all(10.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                EvalQuestion('How well are you prepared for this trip?'),
+                TWRadioButtonQuestion(
+                    context: context,
+                    selectedValue: _selectedPrepLevel,
+                    onChanged: (value) => setState(() {
+                          _selectedPrepLevel = value;
+                        }),
+                    minLabel: 'Not very prepared',
+                    maxLabel: 'Very well prepared',
+                    questionText: 'How well are you prepared for this trip?'),
                 SizedBox(
-                  height: 20.0,
-                ),
-                RatingScale(
-                  scaleType: 'circle',
-                  minText: 'Not very well prepared',
-                  maxText: 'Very well prepared',
-                ),
-                SizedBox(
-                  height: 20.0,
+                  height: 40.0,
                 ),
                 TWFlatButton(
                     inverted: false,
                     context: context,
                     buttonText: 'START TRIP',
                     onPressed: () {
+                      print(_selectedPrepLevel);
                       setState(() {
                         trip.status = 'in-progress';
                         trip.save(context).then((trip) {
