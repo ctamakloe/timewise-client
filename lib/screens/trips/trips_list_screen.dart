@@ -37,7 +37,7 @@ class _TripsListScreenState extends State<TripsListScreen> {
       body: ScreenSection(
           sectionTitle: '',
           sectionAction: SectionAction(),
-          sectionContent: TripList(trips: widget.arguments['trips'])),
+          sectionContent: TripListContent(trips: widget.arguments['trips'])),
     );
   }
 }

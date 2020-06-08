@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:time_wise_app/services/auth_service.dart';
+import 'package:time_wise_app/screens/home_screen.dart';
+import 'package:time_wise_app/screens/login_signup_screen.dart';
 import 'package:time_wise_app/screens/trips/trip_details/trip_details_screen.dart';
 import 'package:time_wise_app/screens/trips/trip_evaluation_screen.dart';
 import 'package:time_wise_app/screens/trips/trip_start_screen.dart';
@@ -32,7 +35,7 @@ class _TripsViewState extends State<TripsView> {
           builder: (BuildContext context) {
             switch (settings.name) {
               case '/':
-                if (widget.startRoute == 'tripPlanner') return WizardScreen();
+//                if (widget.startRoute == 'tripPlanner') return WizardScreen();
                 return TripsHomeScreen();
               case '/tripsHome':
                 return TripsHomeScreen();

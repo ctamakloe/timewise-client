@@ -37,6 +37,7 @@ dependencies:
   autocomplete_textfield: ^1.7.3
   datetime_picker_formfield: ^1.0.0
   http: ^0.12.1
+  shared_preferences: ^0.5.7+3
 
 
 dev_dependencies:
@@ -60,10 +61,6 @@ flutter:
     - assets/images/
     - assets/images/icons/
     - assets/images/trips/
-    - assets/images/trips/scale/
-    - assets/images/trips/type/
-    - assets/images/trips/info/
-    - assets/images/trips/train/
     - assets/images/trips/coverage/
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:time_wise_app/services/trip_service.dart';
 
 class Trip {
   int id;
@@ -10,6 +14,7 @@ class Trip {
   String purpose;
   String travelDirection;
   String status;
+  String rating;
   List<TripLeg> tripLegs = sampleTripLegs;
 
   Trip(
@@ -21,6 +26,7 @@ class Trip {
       this.type,
       this.purpose,
       this.travelDirection,
+      this.rating,
       this.status}) {
 //    initializeDateFormatting('de_DE', null).then(formatDates);
   }
@@ -39,7 +45,22 @@ class Trip {
 
   bool isOutbound() => this.travelDirection == 'outbound';
 
-  String get purposeDescription => '${this.isOutbound() ? 'RTN: ' :'' } ${this.purpose}';
+  bool isUpcoming() => this.status == 'upcoming';
+
+  bool isInProgress() => this.status == 'in-progress';
+
+  bool isCompleted() => this.status == 'completed';
+
+  String get purposeDescription =>
+      '${this.isOutbound() ? 'RTN: ' : ''} ${this.purpose}';
+
+  void start() => this.status = 'in-progress';
+
+  void end() => this.status = 'completed';
+
+  save(BuildContext context) {
+    return TripService().updateTrip(context, this);
+  }
 
   Trip.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -50,12 +71,13 @@ class Trip {
     type = json['trip_type'];
     purpose = json['purpose'];
     travelDirection = json['travel_direction'];
+    rating = json['rating'];
     status = json['status'];
   }
 
-  Map<String, dynamic> toJson() {
+  String toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
+//    data['id'] = this.id;
     data['origin'] = this.origin;
     data['destination'] = this.destination;
     data['departs_at'] = this.departsAt;
@@ -63,8 +85,10 @@ class Trip {
     data['trip_type'] = this.type;
     data['purpose'] = this.purpose;
     data['travel_direction'] = this.travelDirection;
+    data['rating'] = this.rating;
     data['status'] = this.status;
-    return data;
+    String json = jsonEncode(data);
+    return json;
   }
 
   static List<Trip> sampleInProgressTrips =
@@ -75,6 +99,9 @@ class Trip {
 
   static List<Trip> sampleCompleteTrips =
       completeTripsJson.map<Trip>((json) => Trip.fromJson(json)).toList();
+
+  static List<Trip> allTrips =
+      tripsJson.map<Trip>((json) => Trip.fromJson(json)).toList();
 
   static List<TripLeg> sampleTripLegs = [
     TripLeg(
@@ -149,7 +176,7 @@ extension StringExtension on String {
   }
 }
 
-List<Map<String, Object>> upcomingTripsJson = [
+List<Map<String, Object>> inProgressTripsJson = [
   {
     "id": 1,
 //    "origin": "Manchester Picadilly (MAN)",
@@ -160,11 +187,12 @@ List<Map<String, Object>> upcomingTripsJson = [
     "arrives_at": "2000-01-01T14:05:46.120Z",
     "trip_type": "non-business",
     "purpose": "Visit Sean at Uni",
+    "rating": 0,
     "status": "in-progress"
   },
 ];
 
-List<Map<String, Object>> inProgressTripsJson = [
+List<Map<String, Object>> upcomingTripsJson = [
   {
     "id": 2,
     "origin": "london st pancras international",
@@ -173,6 +201,7 @@ List<Map<String, Object>> inProgressTripsJson = [
     "arrives_at": "2020-12-25T20:25:46.120Z",
     "trip_type": "business",
     "purpose": "Return: Meeting at ABC Head Office",
+    "rating": 1,
     "status": "upcoming"
   },
   {
@@ -183,6 +212,7 @@ List<Map<String, Object>> inProgressTripsJson = [
     "arrives_at": "2020-12-25T20:25:46.120Z",
     "trip_type": "leisure",
     "purpose": "Vegan meet-up in Notts",
+    "rating": 1,
     "status": "upcoming"
   },
   {
@@ -193,6 +223,7 @@ List<Map<String, Object>> inProgressTripsJson = [
     "arrives_at": "2020-12-25T20:25:46.120Z",
     "trip_type": "business",
     "purpose": "SXSW Conference",
+    "rating": 1,
     "status": "upcoming"
   }
 ];
@@ -208,7 +239,8 @@ List<Map<String, Object>> completeTripsJson = [
     "arrives_at": "2000-01-01T14:05:46.120Z",
     "trip_type": "leisure",
     "purpose": "Visit Sean at Uni",
-    "status": "complete"
+    "rating": 3,
+    "status": "completed"
   },
   {
     "id": 6,
@@ -218,7 +250,8 @@ List<Map<String, Object>> completeTripsJson = [
     "arrives_at": "2000-01-01T09:05:46.120Z",
     "trip_type": "business",
     "purpose": "Meeting at ABC head office",
-    "status": "complete"
+    "rating": 5,
+    "status": "completed"
   },
   {
     "id": 7,
@@ -228,7 +261,8 @@ List<Map<String, Object>> completeTripsJson = [
     "arrives_at": "2020-12-25T20:25:46.120Z",
     "trip_type": "business",
     "purpose": "Return: Meeting at ABC Head Office",
-    "status": "complete"
+    "rating": 2,
+    "status": "completed"
   },
   {
     "id": 8,
@@ -238,7 +272,8 @@ List<Map<String, Object>> completeTripsJson = [
     "arrives_at": "2020-12-25T20:25:46.120Z",
     "trip_type": "leisure",
     "purpose": "Vegan meet-up in Notts",
-    "status": "complete"
+    "rating": 1,
+    "status": "completed"
   },
   {
     "id": 9,
@@ -248,6 +283,113 @@ List<Map<String, Object>> completeTripsJson = [
     "arrives_at": "2020-12-25T20:25:46.120Z",
     "trip_type": "business",
     "purpose": "SXSW Conference",
-    "status": "complete"
+    "rating": 3,
+    "status": "completed"
+  }
+];
+
+List<Map<String, Object>> tripsJson = [
+  {
+    "id": 1,
+//    "origin": "Manchester Picadilly (MAN)",
+//    "destination": "London St Pancras International (STP)",
+    "origin": "Manchester Picadilly",
+    "destination": "London St Pancras International",
+    "departs_at": "2020-06-02T11:05:46.120Z",
+    "arrives_at": "2000-01-01T14:05:46.120Z",
+    "trip_type": "non-business",
+    "purpose": "Visit Sean at Uni",
+    "rating": 0,
+    "status": "in-progress"
+  },
+  {
+    "id": 2,
+    "origin": "london st pancras international",
+    "destination": "nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
+    "trip_type": "business",
+    "purpose": "Return: Meeting at ABC Head Office",
+    "rating": 1,
+    "status": "upcoming"
+  },
+  {
+    "id": 3,
+    "origin": "Manchester Picadilly",
+    "destination": "Nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
+    "trip_type": "leisure",
+    "purpose": "Vegan meet-up in Notts",
+    "rating": 1,
+    "status": "upcoming"
+  },
+  {
+    "id": 4,
+    "origin": "Reading",
+    "destination": "Nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
+    "trip_type": "business",
+    "purpose": "SXSW Conference",
+    "rating": 1,
+    "status": "upcoming"
+  },
+  {
+    "id": 5,
+//    "origin": "Manchester Picadilly (MAN)",
+//    "destination": "London St Pancras International (STP)",
+    "origin": "Manchester Picadilly",
+    "destination": "London St Pancras International",
+    "departs_at": "2020-06-02T11:05:46.120Z",
+    "arrives_at": "2000-01-01T14:05:46.120Z",
+    "trip_type": "leisure",
+    "purpose": "Visit Sean at Uni",
+    "rating": 3,
+    "status": "completed"
+  },
+  {
+    "id": 6,
+    "origin": "Nottingham",
+    "destination": "London St Pancras International",
+    "departs_at": "2020-05-25T07:10:46.120Z",
+    "arrives_at": "2000-01-01T09:05:46.120Z",
+    "trip_type": "business",
+    "purpose": "Meeting at ABC head office",
+    "rating": 5,
+    "status": "completed"
+  },
+  {
+    "id": 7,
+    "origin": "london st pancras international",
+    "destination": "nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
+    "trip_type": "business",
+    "purpose": "Return: Meeting at ABC Head Office",
+    "rating": 2,
+    "status": "completed"
+  },
+  {
+    "id": 8,
+    "origin": "Manchester Picadilly",
+    "destination": "Nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
+    "trip_type": "leisure",
+    "purpose": "Vegan meet-up in Notts",
+    "rating": 1,
+    "status": "completed"
+  },
+  {
+    "id": 9,
+    "origin": "Reading",
+    "destination": "Nottingham",
+    "departs_at": "2020-12-25T18:15:46.120Z",
+    "arrives_at": "2020-12-25T20:25:46.120Z",
+    "trip_type": "business",
+    "purpose": "SXSW Conference",
+    "rating": 3,
+    "status": "completed"
   }
 ];

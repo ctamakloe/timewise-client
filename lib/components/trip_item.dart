@@ -36,12 +36,6 @@ class _TripListItemState extends State<TripListItem> {
                     : LineAwesomeIcons.theater_masks,
                 size: 30.0,
               ),
-//              child: Image(
-//                  height: 30.0,
-//                  width: 30.0,
-//                  fit: BoxFit.contain,
-//                  image: AssetImage(
-//                      'assets/images/trips/type/${widget.trip.purpose}.png')),
             ),
             Expanded(
                 flex: 6,
@@ -69,17 +63,36 @@ class _TripListItemState extends State<TripListItem> {
                         )),
                   ],
                 )),
-            Expanded(
-              flex: 1,
-              child: Image(
-                  height: 20.0,
-                  width: 20.0,
-                  fit: BoxFit.contain,
-                  image: AssetImage('assets/images/trips/scale/5.png')),
-            ),
+            (widget.trip.status == 'complete')
+                ? Expanded(
+                    flex: 1,
+                    child: Icon(
+                      _tripRatingIcon(),
+                      size: 30.0,
+                    ),
+                  )
+                : Expanded(
+                    flex: 1,
+                    child: Container(),
+                  )
           ],
         ),
       ),
     );
+  }
+
+  IconData _tripRatingIcon() {
+    switch (widget.trip.rating.toString()) {
+      case '1':
+        return LineAwesomeIcons.loudly_crying_face;
+      case '2':
+        return LineAwesomeIcons.frowning_face;
+      case '3':
+        return LineAwesomeIcons.neutral_face;
+      case '4':
+        return LineAwesomeIcons.smiling_face;
+      case '5':
+        return LineAwesomeIcons.grinning_face_with_smiling_eyes;
+    }
   }
 }

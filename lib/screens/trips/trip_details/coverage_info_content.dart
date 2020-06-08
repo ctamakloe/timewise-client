@@ -17,7 +17,7 @@ class CoverageInfoContent extends StatefulWidget {
 }
 
 class _CoverageInfoContentState extends State<CoverageInfoContent> {
-  String activeTile = 'phone';
+  int _activeTileIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,14 @@ class _CoverageInfoContentState extends State<CoverageInfoContent> {
           children: [
             _optionTiles(),
             Divider(),
-            _routeHeatMap(),
+            IndexedStack(
+              index: _activeTileIndex,
+              children: [
+                _routeHeatMap('phone'),
+                _routeHeatMap('data'),
+                _routeHeatMap('wifi')
+              ],
+            ),
             Divider(),
             _heatMapKey()
           ],
@@ -41,9 +48,10 @@ class _CoverageInfoContentState extends State<CoverageInfoContent> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _optionIconTile('phone', Icons.phone_in_talk, activeTile == 'phone'),
-          _optionIconTile('data', LineAwesomeIcons.signal, activeTile == 'data'),
-          _optionIconTile('wifi', Icons.wifi, activeTile == 'wifi'),
+          _optionIconTile('phone', Icons.phone_in_talk, _activeTileIndex == 0),
+          _optionIconTile(
+              'data', LineAwesomeIcons.signal, _activeTileIndex == 1),
+          _optionIconTile('wifi', Icons.wifi, _activeTileIndex == 2),
 //          _optionIconTile('crowd', Icons.people, activeTile == 'crowd'),
         ],
       ),
@@ -63,7 +71,17 @@ class _CoverageInfoContentState extends State<CoverageInfoContent> {
         onTap: () {
           setState(() {
             //TODO: show data for option selected
-            activeTile = option;
+            switch (option) {
+              case 'phone':
+                _activeTileIndex = 0;
+                break;
+              case 'data':
+                _activeTileIndex = 1;
+                break;
+              case 'wifi':
+                _activeTileIndex = 2;
+                break;
+            }
           });
         },
         icon: icon,
@@ -72,14 +90,15 @@ class _CoverageInfoContentState extends State<CoverageInfoContent> {
     );
   }
 
-  _routeHeatMap() {
+  _routeHeatMap(String type) {
     return Container(
-      height: 160.0,
+      height: 180.0,
       width: MediaQuery.of(context).size.width,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: widget.trip.tripLegs.map((leg) => LegHeatMap(leg)).toList(),
+          children:
+              widget.trip.tripLegs.map((leg) => LegHeatMap(leg, type)).toList(),
         ),
       ),
     );

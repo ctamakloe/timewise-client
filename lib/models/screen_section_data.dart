@@ -16,6 +16,14 @@ class SectionAction {
   final String title;
   final String route;
   final Map routeArguments;
+  final String type;
+  final Widget screen;
 
-  SectionAction({this.title='', this.route='', this.routeArguments});
+  SectionAction({
+    this.title = '',
+    this.route = '',
+    this.routeArguments,
+    this.type = '',
+    this.screen,
+  });
 }

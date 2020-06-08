@@ -5,21 +5,23 @@ import 'package:time_wise_app/models/trip.dart';
 class LegHeatMap extends StatelessWidget {
   final TripLeg tripLeg;
   final double cellHeight = 20;
+  final String heatMaptype;
 
-  LegHeatMap(this.tripLeg);
+  LegHeatMap(this.tripLeg, this.heatMaptype);
 
   @override
   Widget build(BuildContext context) {
     // compile a bunch of data columns to get the map for a leg
     return IntrinsicWidth(
       child: Container(
+        padding: EdgeInsets.fromLTRB(0, 20.0, 0, 0),
         child: Stack(
           children: [
             // Chart
             Align(
               alignment: Alignment.topLeft,
               child: Container(
-                height: 125.0,
+//                height: 125.0,
                 child: _combineColumns(),
               ),
             ),

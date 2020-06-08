@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:time_wise_app/components/trip_item.dart';
 import 'package:time_wise_app/models/trip.dart';
 
-class TripList extends StatelessWidget {
+class TripListContent extends StatelessWidget {
   final List<Trip> trips;
 
-  const TripList({
+  const TripListContent({
     Key key,
     this.trips,
   }) : super(key: key);

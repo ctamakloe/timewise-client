@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 class LoginButton extends StatelessWidget {
-  final String label;
+  final String labelText;
+  final VoidCallback onPressed;
 
-  LoginButton(this.label);
+  LoginButton({this.labelText, this.onPressed,});
 
   @override
   Widget build(BuildContext context) {
     return FlatButton(
       child: Text(
-        label,
+        labelText,
         style: TextStyle(
           fontSize: 18,
+          color: Colors.white,
         ),
       ),
       shape: OutlineInputBorder(
@@ -20,7 +22,7 @@ class LoginButton extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(15.0),
       textColor: Colors.white,
-      onPressed: () {},
+      onPressed: onPressed,
     );
   }
 }

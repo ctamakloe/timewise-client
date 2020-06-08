@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:time_wise_app/services/auth_service.dart';
+import 'package:time_wise_app/screens/home_screen.dart';
+import 'package:time_wise_app/screens/login_signup_screen.dart';
 import 'package:time_wise_app/screens/profile/account_edit_screen.dart';
 import 'package:time_wise_app/screens/profile/profile_home_screen.dart';
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({
+  ProfileView({
     Key key,
   }) : super(key: key);
 

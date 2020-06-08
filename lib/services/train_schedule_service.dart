@@ -1,22 +1,23 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:time_wise_app/models/api/api_train_schedule.dart';
 import 'package:http/http.dart' as http;
+import 'package:time_wise_app/services/auth_service.dart';
+import 'package:time_wise_app/state_container.dart';
 
 class TrainScheduleService {
-  Future<List<APITrainSchedule>> getTrainSchedules(
+  Future<List<APITrainSchedule>> getTrainSchedules(BuildContext context,
       String startStation, String endStation, String date, String time) async {
-
-    String _serviceUrl = 'http://localhost:3000/schedules.json?'
+    var container = StateContainer.of(context);
+    String _serviceUrl = '${container.getApiUrl()}/schedules.json?'
         'start_station=$startStation'
         '&end_station=$endStation'
         '&date=$date'
         '&time=$time';
-
     final _headers = {
       'Content-Type': 'application/json',
-      'Authorization':
-          ' eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1OTEzNjExMzh9.BjfdStNCX3p7wQXk_XSxakz1oX6KBJ-IztUznnf28kw'
+      'Authorization': container.getAppState().token.toString(),
     };
 
     try {

@@ -9,16 +9,23 @@ import 'package:time_wise_app/models/trip.dart';
 import 'package:time_wise_app/screens/trips/trip_evaluation_screen.dart';
 import 'package:time_wise_app/screens/trips/trip_start_screen.dart';
 
-class TripDetailsContent extends StatelessWidget {
-  const TripDetailsContent({
+class TripDetailsContent extends StatefulWidget {
+  TripDetailsContent({
     Key key,
     @required this.trip,
   }) : super(key: key);
 
-  final Trip trip;
+  Trip trip;
 
   @override
+  _TripDetailsContentState createState() => _TripDetailsContentState();
+}
+
+class _TripDetailsContentState extends State<TripDetailsContent> {
+  @override
   Widget build(BuildContext context) {
+    Trip _trip = widget.trip;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(10.0),
@@ -30,7 +37,7 @@ class TripDetailsContent extends StatelessWidget {
           Column(
             children: [
               Text(
-                this.trip.origin,
+                _trip.origin,
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 18,
@@ -45,7 +52,7 @@ class TripDetailsContent extends StatelessWidget {
                     image: AssetImage('assets/images/arrow-down.png')),
               ),
               Text(
-                this.trip.destination,
+                _trip.destination,
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   fontSize: 18,
@@ -55,7 +62,7 @@ class TripDetailsContent extends StatelessWidget {
           ),
           SizedBox(height: 15.0),
 // description
-          Text(this.trip.purposeDescription),
+          Text(_trip.purposeDescription),
           SizedBox(height: 15.0),
 // schedule
           Row(
@@ -81,7 +88,7 @@ class TripDetailsContent extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    this.trip.schedule,
+                    _trip.schedule,
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.w500,
@@ -98,18 +105,16 @@ class TripDetailsContent extends StatelessWidget {
 //          Divider(thickness: 1.0, height: 40.0,),
           DetailItemText(
             detailIcon: Icons.timer,
-            detailLabel: this.trip.status == 'complete'
-                ? 'Duration'
-                : 'Expected Duration',
+            detailLabel: _trip.isCompleted() ? 'Duration' : 'Expected Duration',
             detailValue: '1h 50m',
           ),
           DetailItemDivider(),
           DetailItemText(
-            detailIcon: this.trip.isBusiness()
+            detailIcon: _trip.isBusiness()
                 ? LineAwesomeIcons.briefcase
                 : LineAwesomeIcons.theater_masks,
             detailLabel: 'Trip Type',
-            detailValue: this.trip.type.capitalize(),
+            detailValue: _trip.type.capitalize(),
           ),
           DetailItemDivider(),
           Row(
@@ -186,17 +191,17 @@ class TripDetailsContent extends StatelessWidget {
           ),
           DetailItemDivider(),
 // start/stop trip button
-          if (this.trip.status != 'complete') _statusSection(context),
+          if (!_trip.isCompleted()) _statusSection(context, _trip),
         ],
       ),
     );
   }
 
-  Column _statusSection(BuildContext context) {
+  Column _statusSection(BuildContext context, Trip trip) {
     return Column(
       children: [
         Text(
-          _tripStatusMessage(this.trip.status),
+          _tripStatusMessage(trip),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16.0,
@@ -205,64 +210,56 @@ class TripDetailsContent extends StatelessWidget {
         Container(
             width: double.infinity,
             margin: EdgeInsets.all(20),
-            child: _statusButton(context)),
+            child: _statusButton(context, trip)),
       ],
     );
   }
 
-  String _tripStatusMessage(String status) {
-    switch (status) {
-      case 'upcoming':
-        return 'This trip has not yet started';
-        break;
-      case 'complete':
-        return 'This trip has ended';
-        break;
-      default:
-        return 'This trip is currently in progress';
-    }
+  String _tripStatusMessage(Trip trip) {
+    if (trip.isUpcoming()) return 'This trip has not yet started';
+
+    if (trip.isCompleted()) return 'This trip has ended';
+
+    return 'This trip is currently in progress';
   }
 
-  TWFlatButton _statusButton(BuildContext context) {
+  TWFlatButton _statusButton(BuildContext context, Trip trip) {
     return TWFlatButton(
-      inverted: false,
+        inverted: false,
         context: context,
-        buttonText: this.trip.status == 'upcoming' ? 'START TRIP' : 'END TRIP',
+        buttonText: trip.isUpcoming() ? 'START TRIP' : 'END TRIP',
         onPressed: () {
-          switch (this.trip.status) {
-            // START TRIP
-            case 'upcoming':
-              {
-                // TODO: set trip to in-progress on server
-                showMaterialModalBottomSheet(
-                  context: context,
-                  builder: (context, scrollController) =>
-                      TripStartScreen({'trip': this.trip}),
-                );
-              }
-              break;
-            // END TRIP
-            case 'in-progress':
-              {
-                // TODO: set trip to started on server
-                // navigate to trip evaluation screen
-//                Navigator.pushNamed(context, '/tripEval',
-//                    arguments: {'trip': this.trip});
-//                showBarModalBottomSheet(
-//                    context: context,
-//                    builder:
-//                );
-                showMaterialModalBottomSheet(
-                  context: context,
-                  builder: (context, scrollController) =>
-                      TripEvaluationScreen({'trip': this.trip}),
-                );
-              }
-              break;
-            default:
-              {}
-              break;
+          if (trip.isUpcoming()) {
+            _navigateAndDisplaySelection(
+              context,
+              trip,
+              TripStartScreen({'trip': trip}),
+            );
+          } else if (trip.isInProgress()) {
+            _navigateAndDisplaySelection(
+              context,
+              trip,
+              TripEvaluationScreen({'trip': trip}),
+            );
           }
         });
+  }
+
+  _navigateAndDisplaySelection(
+      BuildContext context, Trip trip, Widget route) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute(
+        builder: (context) => route,
+      ),
+    );
+    if (result != null) {
+      setState(() {
+        trip = result;
+      });
+    }
   }
 }

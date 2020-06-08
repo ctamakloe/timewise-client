@@ -20,7 +20,7 @@ class ServicesInfoContent extends StatelessWidget {
       height: 100.0,
       child: Column(
         children: [
-          Text('Your train provider is East Midlands Railways'),
+          Text('Service provided by East Midlands Railways'),
           SizedBox(height: 20.0),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             _serviceInfoTile(context, LineAwesomeIcons.wifi, 'How to access WiFi'),

@@ -6,14 +6,18 @@ import 'package:time_wise_app/components/rating_scale.dart';
 import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/components/tw_flatbutton.dart';
 import 'package:time_wise_app/models/screen_section_data.dart';
+import 'package:time_wise_app/models/trip.dart';
+import 'package:time_wise_app/state_container.dart';
 
 class TripEvaluationScreen extends StatefulWidget {
   final Map arguments;
+  final Trip trip;
 
   TripEvaluationScreen(
     this.arguments, {
     Key key,
-  }) : super(key: key);
+  })  : trip = arguments['trip'],
+        super(key: key);
 
   @override
   _TripEvaluationScreenState createState() => _TripEvaluationScreenState();
@@ -38,11 +42,13 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Trip _trip = widget.trip;
+
     List<ScreenSectionData> sectionsData = <ScreenSectionData>[
       ScreenSectionData(
           sectionTitle: 'TRIP EXPERIENCE',
           sectionAction: SectionAction(),
-          sectionContent: _tripEvalContent()),
+          sectionContent: _tripEvalContent(_trip)),
     ];
 
     return Scaffold(
@@ -60,7 +66,7 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
             }));
   }
 
-  _tripEvalContent() {
+  _tripEvalContent(Trip trip) {
     return Container(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -91,7 +97,19 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
             inverted: false,
             context: context,
             buttonText: 'END TRIP',
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              setState(() {
+                trip.status = 'completed';
+
+                trip.save(context).then((trip) {
+//                  StateContainer.of(context).setShouldRefreshTrips(true);
+
+                  Scaffold.of(context)
+                      .showSnackBar(SnackBar(content: Text('Trip ended')));
+                  Navigator.pop(context, trip);
+                });
+              });
+            },
           ),
         ],
       ),
@@ -100,19 +118,21 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
 
   _tripNotes() {
     return Container(
-      child: Column(
-        children: [
-          EvalQuestion('What would you like to remember for this trip?'),
-          SizedBox(height: 10.0,),
-          TextField(
+      child: Column(children: [
+        EvalQuestion('What would you like to remember for this trip?'),
+        SizedBox(
+          height: 10.0,
+        ),
+        TextField(
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.edit, color: Colors.indigo,),
+              prefixIcon: Icon(
+                Icons.edit,
+                color: Colors.indigo,
+              ),
             ),
 //            maxLines: 4,
-            onChanged: (text) => { this.notes = text}
-          ),
-        ]
-      ),
+            onChanged: (text) => {this.notes = text}),
+      ]),
     );
   }
 
@@ -253,19 +273,17 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
                 _activityTile('Make phone calls or send messages',
                     LineAwesomeIcons.mobile_phone),
                 _activityTile('Read', LineAwesomeIcons.book_open),
-                _activityTile(
-                    'Write or edit documents', LineAwesomeIcons.edit),
+                _activityTile('Write or edit documents', LineAwesomeIcons.edit),
                 _activityTile(
                     'Browse the Internet (social media, travel info, etc.)',
                     LineAwesomeIcons.globe),
                 _activityTile('Watch videos', LineAwesomeIcons.film),
-                _activityTile(
-                    'Listen to music, podcasts, audio books or radio',
+                _activityTile('Listen to music, podcasts, audio books or radio',
                     LineAwesomeIcons.headphones),
                 _activityTile('Play games', LineAwesomeIcons.gamepad),
                 _activityTile('Take a nap', LineAwesomeIcons.bed),
-                _activityTile('Talk to other passengers',
-                    LineAwesomeIcons.user_friends),
+                _activityTile(
+                    'Talk to other passengers', LineAwesomeIcons.user_friends),
                 _activityTile('Care for other passengers',
                     LineAwesomeIcons.universal_access),
               ],

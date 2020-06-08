@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:time_wise_app/models/screen_section_data.dart';
 
 class ScreenSection extends StatefulWidget {
@@ -51,22 +52,34 @@ class _ScreenSectionState extends State<ScreenSection> {
               fontSize: 16.0,
             ),
           ),
-          widget.sectionAction != null
-              ? InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, widget.sectionAction.route,
-                        arguments: widget.sectionAction.routeArguments);
-                  },
-                  child: Text(
-                    widget.sectionAction.title,
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              : ''
+          _buildSectionAction(),
         ],
+      ),
+    );
+  }
+
+  _buildSectionAction() {
+    if (widget.sectionAction == null) return '';
+
+    return InkWell(
+      onTap: () {
+        if (widget.sectionAction.type == 'modal') {
+          showMaterialModalBottomSheet(
+              context: context,
+              builder: (context, scrollController) {
+                return widget.sectionAction.screen;
+              });
+        } else {
+          Navigator.pushNamed(context, widget.sectionAction.route,
+              arguments: widget.sectionAction.routeArguments);
+        }
+      },
+      child: Text(
+        widget.sectionAction.title,
+        style: TextStyle(
+          fontSize: 14.0,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

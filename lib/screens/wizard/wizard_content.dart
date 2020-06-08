@@ -19,7 +19,8 @@ class _WizardContentState extends State<WizardContent> {
   // stepper
   List<Step> _steps = [];
   int _currentStep = 0;
-  bool _complete = false;
+
+//  bool _complete = false;
 
   // form => step 1
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -62,19 +63,20 @@ class _WizardContentState extends State<WizardContent> {
 //      if this returns a trip, navigate to trip page
 //      else show message
       TripFormData _formData = TripFormData();
+      _formData.scheduleId = _selectedScheduleId;
       _formData.tripPurpose = _purposeController.text;
       _formData.tripType = _tripType;
       _formData.travelDirection = _travelDirection;
-      _formData.scheduleId = _selectedScheduleId;
+      _formData.rating = '0';
 
       var tripService = TripService();
 
-      tripService.createTrip(_formData).then((value) {
+      tripService.createTrip(context, _formData).then((value) {
         setState(() {
           Navigator.pushNamedAndRemoveUntil(
               context, '/tripDetails', ModalRoute.withName('/'),
               arguments: value);
-          _complete = true;
+//          _complete = true;
         });
       });
     }
@@ -200,8 +202,10 @@ class _WizardContentState extends State<WizardContent> {
                       format: _dateFormat,
                       cursorColor: Colors.indigo,
                       controller: _dateController,
-                      onChanged: (value) =>
-                          _dateController.text = _dateFormat.format(value),
+                      onChanged: (value) {
+                        if (value != null)
+                          _dateController.text = _dateFormat.format(value);
+                      },
                       onShowPicker: (context, currentValue) {
                         return showDatePicker(
                           context: context,
@@ -233,8 +237,10 @@ class _WizardContentState extends State<WizardContent> {
                       format: _timeFormat,
                       cursorColor: Colors.indigo,
                       controller: _timeController,
-                      onChanged: (value) =>
-                          _timeController.text = _timeFormat.format(value),
+                      onChanged: (value) {
+                        if (value != null)
+                          _timeController.text = _timeFormat.format(value);
+                      },
                       onShowPicker: (context, currentValue) async {
                         final time = await showTimePicker(
                             context: context,
@@ -310,17 +316,12 @@ class _WizardContentState extends State<WizardContent> {
           ? _buildScheduleList(_scheduleList)
           : FutureBuilder(
               future: TrainScheduleService().getTrainSchedules(
+                context,
                 _fromStationController.text,
                 _toStationController.text,
                 _dateController.text,
                 _timeController.text,
               ),
-//        future: TrainScheduleService.getTrainSchedules(
-//                _fromStationController.text,
-//                _toStationController.text,
-//                _dateController.text,
-//                _timeController.text,
-//              ),
               builder: (context, schedulesSnap) {
                 if (schedulesSnap.data == null)
                   return Container(

@@ -4,6 +4,7 @@ import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/components/trip_list.dart';
 import 'package:time_wise_app/models/screen_section_data.dart';
 import 'package:time_wise_app/models/trip.dart';
+import 'package:time_wise_app/screens/trips/add_checklist_screen.dart';
 import 'package:time_wise_app/screens/trips/trip_details/coverage_info_content.dart';
 import 'package:time_wise_app/screens/trips/trip_details/services_info_content.dart';
 import 'package:time_wise_app/screens/trips/trip_details/trip_check_list_content.dart';
@@ -32,7 +33,7 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
       ),
     ];
 
-    if (widget.trip.status != 'complete') {
+//    if (!widget.trip.isCompleted()) {
       sectionsData.add(ScreenSectionData(
         sectionTitle: 'AVAILABLE SERVICES',
         sectionAction: SectionAction(),
@@ -47,10 +48,15 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
 
       sectionsData.add(ScreenSectionData(
         sectionTitle: 'TRIP CHECKLIST',
-        sectionAction: SectionAction(),
+        sectionAction: SectionAction(
+          type: 'modal',
+          title: 'Add item',
+          screen: AddChecklistScreen(),
+        ),
         sectionContent: TripChecklistContent(trip: widget.trip),
       ));
 
+      /*
       sectionsData.add(ScreenSectionData(
           sectionTitle: 'PREVIOUS TRIPS',
           sectionAction: SectionAction(
@@ -60,9 +66,10 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                 'title': 'Previous Trips',
                 'trips': Trip.sampleCompleteTrips
               }),
-          sectionContent:
-              TripList(trips: Trip.sampleCompleteTrips.take(2).toList())));
-    }
+          sectionContent: TripListContent(
+              trips: Trip.sampleCompleteTrips.take(2).toList())));
+      */
+//    }
 
     return Scaffold(
         appBar: PreferredSize(
