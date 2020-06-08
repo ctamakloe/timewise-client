@@ -6,8 +6,12 @@ import 'package:time_wise_app/services/trip_service.dart';
 
 class Trip {
   int id;
-  String origin;
-  String destination;
+//  String origin;
+//  String destination;
+  String originStationName;
+  String originStationCode;
+  String destinationStationName;
+  String destinationStationCode;
   String departsAt;
   String arrivesAt;
   String type;
@@ -19,8 +23,10 @@ class Trip {
 
   Trip(
       {this.id,
-      this.origin,
-      this.destination,
+      this.originStationName,
+      this.originStationCode,
+      this.destinationStationName,
+      this.destinationStationCode,
       this.departsAt,
       this.arrivesAt,
       this.type,
@@ -31,7 +37,7 @@ class Trip {
 //    initializeDateFormatting('de_DE', null).then(formatDates);
   }
 
-  String get title => '${this.origin} to ${this.destination}';
+  String get title => '${this.originStationName} to ${this.destinationStationName}';
 
   String get schedule {
     String dt = DateFormat.Hm().format(DateTime.parse(departsAt));
@@ -52,7 +58,7 @@ class Trip {
   bool isCompleted() => this.status == 'completed';
 
   String get purposeDescription =>
-      '${this.isOutbound() ? 'RTN: ' : ''} ${this.purpose}';
+      '${this.purpose} ${this.isOutbound() ? '' : '(Return)'} ';
 
   void start() => this.status = 'in-progress';
 
@@ -64,8 +70,12 @@ class Trip {
 
   Trip.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    origin = json['origin'];
-    destination = json['destination'];
+//    origin = json['origin'];
+//    destination = json['destination'];
+    originStationName = json['origin_station_name'];
+    originStationCode = json['origin_station_code'];
+    destinationStationName = json['destination_station_name'];
+    destinationStationCode = json['destination_station_code'];
     departsAt = json['departs_at'];
     arrivesAt = json['arrives_at'];
     type = json['trip_type'];
@@ -78,8 +88,12 @@ class Trip {
   String toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
 //    data['id'] = this.id;
-    data['origin'] = this.origin;
-    data['destination'] = this.destination;
+//    data['origin'] = this.origin;
+//    data['destination'] = this.destination;
+    data['origin_station_name'] = this.originStationName;
+    data['origin_station_code'] = this.originStationCode;
+    data['destination_station_name'] = this.destinationStationName;
+    data['destination_station_code'] = this.destinationStationCode;
     data['departs_at'] = this.departsAt;
     data['arrives_at'] = this.arrivesAt;
     data['trip_type'] = this.type;

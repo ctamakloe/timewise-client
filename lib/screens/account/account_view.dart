@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:time_wise_app/screens/account/account_edit_screen.dart';
+import 'package:time_wise_app/screens/account/account_home_screen.dart';
 import 'package:time_wise_app/screens/profile/profile_home_screen.dart';
 
-class ProfileView extends StatefulWidget {
-  ProfileView({
+class AccountView extends StatefulWidget {
+  AccountView({
     Key key,
   }) : super(key: key);
 
   @override
-  _ProfileViewState createState() => _ProfileViewState();
+  _AccountViewState createState() => _AccountViewState();
 }
 
-class _ProfileViewState extends State<ProfileView> {
+class _AccountViewState extends State<AccountView> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
@@ -21,7 +23,9 @@ class _ProfileViewState extends State<ProfileView> {
           builder: (BuildContext context) {
             switch (settings.name) {
               case '/':
-                return ProfileHomeScreen();
+                return AccountHomeScreen();
+              case '/accountEdit':
+                return AccountEditScreen();
             }
           },
         );

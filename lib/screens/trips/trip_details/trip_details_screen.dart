@@ -41,7 +41,7 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
       ));
 
       sectionsData.add(ScreenSectionData(
-        sectionTitle: 'SIGNAL COVERAGE',
+        sectionTitle: 'SERVICE TRACKER',
         sectionAction: SectionAction(),
         sectionContent: CoverageInfoContent(trip: widget.trip),
       ));

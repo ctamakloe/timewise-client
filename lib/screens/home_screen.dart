@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:time_wise_app/screens/account/account_view.dart';
 import 'package:time_wise_app/screens/login_signup_screen.dart';
+import 'package:time_wise_app/screens/profile/profile_home_screen.dart';
 import 'package:time_wise_app/screens/profile/profile_view.dart';
 import 'package:time_wise_app/screens/trips/trips_view.dart';
 import 'package:time_wise_app/state_container.dart';
@@ -33,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       default:
         return Scaffold(
-
           body: SafeArea(
             top: false,
             child: _buildApp(),
@@ -56,8 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       // sets the inactive color of the `BottomNavigationBar`
       child: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
           currentIndex: _currentIndex,
           onTap: (int index) {
             setState(() {
@@ -67,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
           items: [
             BottomNavigationBarItem(
               backgroundColor: Colors.indigoAccent,
-              title: Text('Trips', style: TextStyle(fontSize: 16.0)),
+              title: Text('Trips', style: TextStyle(fontSize: 14.0)),
               icon: Icon(
                 LineAwesomeIcons.train,
                 size: 30.0,
@@ -75,7 +76,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BottomNavigationBarItem(
               backgroundColor: Colors.indigoAccent,
-              title: Text('Profile', style: TextStyle(fontSize: 16.0)),
+              title: Text('Profile', style: TextStyle(fontSize: 14.0)),
+              icon: Icon(
+                LineAwesomeIcons.bar_chart_1,
+                size: 30.0,
+              ),
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: Colors.indigoAccent,
+              title: Text('Account', style: TextStyle(fontSize: 14.0)),
               icon: Icon(
                 LineAwesomeIcons.user_circle,
                 size: 30.0,
@@ -91,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         TripsView(),
         ProfileView(),
+        AccountView(),
       ],
     );
   }
@@ -163,6 +173,6 @@ class Destination {
 
 List<Destination> allDestinations = <Destination>[
   Destination('Trips', LineAwesomeIcons.train, TripsView()),
-//  Destination('Planner', LineAwesomeIcons.calendar_plus, WizardScreen()),
-  Destination('Profile', LineAwesomeIcons.user_circle, ProfileView()),
+  Destination('Profile', LineAwesomeIcons.bar_chart, ProfileView()),
+  Destination('Account', LineAwesomeIcons.user_circle, AccountView()),
 ];

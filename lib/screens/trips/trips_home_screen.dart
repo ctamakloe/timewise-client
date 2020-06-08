@@ -138,11 +138,14 @@ class _TripsHomeScreenState extends State<TripsHomeScreen> {
           preferredSize: Size.fromHeight(60.0),
           child: TimeWiseAppBar(title: 'Trips', actions: [
             // action button
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                Navigator.pushNamed(context, '/tripPlanner');
-              },
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+              child: IconButton(
+                icon: Icon(LineAwesomeIcons.calendar_plus, size: 30.0,),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/tripPlanner');
+                },
+              ),
             ),
           ])),
       body: RefreshIndicator(

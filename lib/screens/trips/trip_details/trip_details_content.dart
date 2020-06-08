@@ -37,7 +37,7 @@ class _TripDetailsContentState extends State<TripDetailsContent> {
           Column(
             children: [
               Text(
-                _trip.origin,
+                _trip.originStationName,
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 18,
@@ -52,7 +52,7 @@ class _TripDetailsContentState extends State<TripDetailsContent> {
                     image: AssetImage('assets/images/arrow-down.png')),
               ),
               Text(
-                _trip.destination,
+                _trip.destinationStationName,
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   fontSize: 18,

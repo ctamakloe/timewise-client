@@ -4,20 +4,19 @@ import 'package:time_wise_app/components/app_bar_title.dart';
 import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/models/screen_section_data.dart';
 import 'package:time_wise_app/screens/account/account_details_content.dart';
-import 'package:time_wise_app/screens/profile/travel_profile_content.dart';
 import 'package:time_wise_app/state_container.dart';
 
-class ProfileHomeScreen extends StatefulWidget {
+class AccountHomeScreen extends StatefulWidget {
   @override
-  _ProfileHomeScreenState createState() => _ProfileHomeScreenState();
+  _AccountHomeScreenState createState() => _AccountHomeScreenState();
 }
 
-class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
+class _AccountHomeScreenState extends State<AccountHomeScreen> {
   List<ScreenSectionData> sectionsData = <ScreenSectionData>[
     ScreenSectionData(
-      sectionTitle: 'TRAVEL PROFILE',
+      sectionTitle: '',
       sectionAction: SectionAction(),
-      sectionContent: TravelProfileContent(),
+      sectionContent: AccountDetailsContent(),
     ),
   ];
 
@@ -26,9 +25,19 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
     return Scaffold(
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(60.0),
-            child: TimeWiseAppBar(
-              title: 'Profile',
-              actions: [],
+            child: TimeWiseAppBar(title: 'Account',
+              actions: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                  child: IconButton(
+                    icon: Icon(Icons.exit_to_app, size: 25.0),
+                    onPressed: () {
+                      StateContainer.of(context).logout();
+                      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+                    },
+                  ),
+                ),
+              ],
             )),
         body: ListView.builder(
             itemCount: sectionsData.length,

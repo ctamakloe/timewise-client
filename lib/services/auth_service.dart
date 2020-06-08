@@ -49,6 +49,8 @@ class AuthService {
       final response =
           await http.post(_serviceUrl, headers: _headers, body: json);
 
+//      print(response.body);
+
       User user = User.fromJson(jsonDecode(response.body)['user']);
       return user;
     } catch (e) {

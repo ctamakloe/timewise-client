@@ -29,26 +29,37 @@ class _TripListItemState extends State<TripListItem> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              flex: 1,
-              child: Icon(
-                widget.trip.isBusiness()
-                    ? LineAwesomeIcons.briefcase
-                    : LineAwesomeIcons.theater_masks,
-                size: 30.0,
+              flex: 2,
+              child: Container(
+                height: 40.0,
+                width: 40.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.indigo[300],
+                ),
+                child: Icon(
+                  widget.trip.isBusiness()
+                      ? LineAwesomeIcons.briefcase
+                      : LineAwesomeIcons.theater_masks,
+                  size: 25.0,
+                  color: Colors.white,
+                ),
               ),
             ),
             Expanded(
-                flex: 6,
+                flex: 5,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.trip.purpose),
+                    Text(
+                      widget.trip.title,
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.w500),
+                    ),
                     SizedBox(
                       height: 5.0,
                     ),
-                    Text(
-                      widget.trip.title,
-                    ),
+                    if (!widget.trip.purpose.isEmpty) Text(widget.trip.purpose),
                     SizedBox(
                       height: 5.0,
                     ),
@@ -63,7 +74,7 @@ class _TripListItemState extends State<TripListItem> {
                         )),
                   ],
                 )),
-            (widget.trip.status == 'complete')
+            (widget.trip.isCompleted())
                 ? Expanded(
                     flex: 1,
                     child: Icon(
@@ -82,7 +93,7 @@ class _TripListItemState extends State<TripListItem> {
   }
 
   IconData _tripRatingIcon() {
-    switch (widget.trip.rating.toString()) {
+    switch (widget.trip.rating) {
       case '1':
         return LineAwesomeIcons.loudly_crying_face;
       case '2':
@@ -92,6 +103,8 @@ class _TripListItemState extends State<TripListItem> {
       case '4':
         return LineAwesomeIcons.smiling_face;
       case '5':
+        return LineAwesomeIcons.grinning_face_with_smiling_eyes;
+      default:
         return LineAwesomeIcons.grinning_face_with_smiling_eyes;
     }
   }

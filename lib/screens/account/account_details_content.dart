@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:time_wise_app/components/tw_flatbutton.dart';
-import 'package:time_wise_app/services/auth_service.dart';
-import 'package:time_wise_app/screens/login_signup_screen.dart';
 import 'package:time_wise_app/state_container.dart';
 
 class AccountDetailsContent extends StatefulWidget {
