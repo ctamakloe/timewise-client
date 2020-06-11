@@ -19,8 +19,6 @@ class TripService {
         headers: _headers,
       );
 
-//      print(response.body);
-
       List<Trip> _trips = List<Trip>.from(jsonDecode(response.body)
           .map((json) => Trip.fromJson(json))
           .toList());
@@ -43,10 +41,11 @@ class TripService {
     try {
       var json = formData.toJson();
 
+      print(json);
+
       final response =
           await http.post(_serviceUrl, headers: _headers, body: json);
 
-      print(response.body);
       return Trip.fromJson(jsonDecode(response.body));
     } catch (e) {
       print('Server exception in createTrip');

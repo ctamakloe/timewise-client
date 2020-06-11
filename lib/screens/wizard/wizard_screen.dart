@@ -13,6 +13,7 @@ class _WizardScreenState extends State<WizardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(60.0),
           child: TimeWiseAppBar(title: 'Trip Planner')),

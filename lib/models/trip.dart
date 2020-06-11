@@ -6,6 +6,7 @@ import 'package:time_wise_app/services/trip_service.dart';
 
 class Trip {
   int id;
+
 //  String origin;
 //  String destination;
   String originStationName;
@@ -37,7 +38,8 @@ class Trip {
 //    initializeDateFormatting('de_DE', null).then(formatDates);
   }
 
-  String get title => '${this.originStationName} to ${this.destinationStationName}';
+  String get title =>
+      '${this.originStationName} to ${this.destinationStationName}';
 
   String get schedule {
     String dt = DateFormat.Hm().format(DateTime.parse(departsAt));
@@ -119,44 +121,89 @@ class Trip {
 
   static List<TripLeg> sampleTripLegs = [
     TripLeg(
-        startStation: 'Nottigham',
-        endStation: 'London St Pancras Intl',
-        legType: 'departure', // departure, transit, arrival
+        startStation: 'Nottingham',
+        endStation: 'Beeston',
+        legType: 'departure',
+//        stopTime: '11:00',
         dataCells: [
-          TripLegDataCell('10:00', 10, '1'),
-          TripLegDataCell('10:10', 20, '2'),
-          TripLegDataCell('10:20', 30, '3'),
-          TripLegDataCell('10:30', 30, '0'),
-        ] // <TripLegDataCell>[]
-        ),
+          TripLegDataCell('11:00', 10, '5'),
+          TripLegDataCell('11:08', 10, '5'),
+        ]),
     TripLeg(
-        startStation: 'London St Pancras Intl',
-        endStation: 'Manchester Picadilly (MAN)',
-        legType: 'transit', // departure, transit, arrival
+        startStation: 'Beeston',
+        endStation: 'Loughborough',
+        legType: 'transit',
+//        stopTime: '11:09',
         dataCells: [
-          TripLegDataCell('10:40', 40, '2'),
-          TripLegDataCell('10:50', 50, '3'),
-          TripLegDataCell('11:00', 10, '1'),
-          TripLegDataCell('11:10', 20, '0'),
-          TripLegDataCell('11:20', 30, '0'),
-          TripLegDataCell('11:30', 30, '1'),
-          TripLegDataCell('11:40', 40, '2'),
-          TripLegDataCell('11:50', 50, '3'),
-        ] // <TripLegDataCell>[]
-        ),
+          TripLegDataCell('11:09', 10, '5'),
+          TripLegDataCell('11:18', 10, '5'),
+        ]),
     TripLeg(
-        startStation: 'Manchester Picadilly (MAN)',
-        endStation: 'East Midlands Airport (EMA)',
-        legType: 'arrival', // departure, transit, arrival
+        startStation: 'Loughborough',
+        endStation: 'Leicester',
+        legType: 'transit',
+//        stopTime: '11:19',
         dataCells: [
-          TripLegDataCell('12:00', 10, '1'),
-          TripLegDataCell('12:10', 20, '0'),
-          TripLegDataCell('12:20', 30, '0'),
-          TripLegDataCell('12:30', 30, '1'),
-          TripLegDataCell('12:40', 40, '2'),
-          TripLegDataCell('12:50', 50, '3'),
-        ] // <TripLegDataCell>[]
-        ),
+          TripLegDataCell('11:19', 10, '4'),
+          TripLegDataCell('11:27', 10, '4'),
+          TripLegDataCell('11:37', 10, '3')
+        ]),
+    TripLeg(
+        startStation: 'Leicester',
+        endStation: 'Market Harborough',
+        legType: 'transit',
+//        stopTime: '11:38',
+        dataCells: [
+          TripLegDataCell('11:38', 10, '3'),
+          TripLegDataCell('11:48', 10, '3'),
+          TripLegDataCell('11:50', 10, '3'),
+        ]),
+    TripLeg(
+        startStation: 'Market Harborough',
+        endStation: 'Kettering',
+        legType: 'transit',
+//        stopTime: '11:51',
+        dataCells: [
+          TripLegDataCell('11:51', 10, '2'),
+          TripLegDataCell('12:00', 10, '2')
+        ]),
+    TripLeg(
+        startStation: 'Kettering',
+        endStation: 'Wellingborough',
+        legType: 'transit',
+//        stopTime: '12:01',
+        dataCells: [
+          TripLegDataCell('12:01', 10, '2'),
+          TripLegDataCell('12:07', 10, '2')
+        ]),
+    TripLeg(
+        startStation: 'Wellingborough',
+        endStation: 'Bedford',
+        legType: 'transit',
+//        stopTime: '12:08',
+        dataCells: [
+          TripLegDataCell('12:08', 10, '1'),
+          TripLegDataCell('12:21', 10, '1')
+        ]),
+    TripLeg(
+        startStation: 'Bedford',
+        endStation: 'Luton Airport Parkway',
+        legType: 'transit',
+//        stopTime: '12:22',
+        dataCells: [
+          TripLegDataCell('12:22', 10, '0'),
+          TripLegDataCell('12:32', 10, '0'),
+          TripLegDataCell('12:37', 10, '0')
+        ]),
+    TripLeg(
+        startStation: 'Luton Airport Parkway',
+        endStation: 'London St Pancras',
+        legType: 'arrival',
+//        stopTime: '12:38',
+        dataCells: [
+          TripLegDataCell('12:38', 10, '1'),
+          TripLegDataCell('13:10', 10, '1')
+        ]),
   ];
 }
 
@@ -164,11 +211,14 @@ class TripLeg {
   String startStation;
   String endStation;
   String legType;
+
+//  String stopTime;
   List<TripLegDataCell> dataCells;
 
   TripLeg({
     this.startStation, // Nottingham
     this.endStation, // London St Pancras Intl
+//    this.stopTime,
     this.legType, // departure, transit, arrival
     this.dataCells, // <TripLegDataCell>[]
   });

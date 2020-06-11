@@ -36,6 +36,7 @@ class _TripDetailsContentState extends State<TripDetailsContent> {
 // origin - destination
           Column(
             children: [
+              SizedBox(height: 20.0,),
               Text(
                 _trip.originStationName,
                 textAlign: TextAlign.left,
@@ -44,7 +45,7 @@ class _TripDetailsContentState extends State<TripDetailsContent> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 5.0),
+                margin: EdgeInsets.symmetric(vertical: 10.0),
                 child: Image(
                     height: 12.0,
                     width: 12.0,
@@ -72,7 +73,7 @@ class _TripDetailsContentState extends State<TripDetailsContent> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Mon, 25 May',
+                    _trip.date,
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.w500,

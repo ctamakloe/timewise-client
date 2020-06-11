@@ -19,13 +19,12 @@ class AuthService {
 
     try {
       var json = jsonEncode({
-        'user': {'name': name, 'email': email, 'password': password}
+        'user': {'name': name, 'email': email.toLowerCase(), 'password': password}
       });
 
       final response =
           await http.post(_serviceUrl, headers: _headers, body: json);
 
-      print(response.body);
       User user = User.fromJson(jsonDecode(response.body)['user']);
       return user;
     } catch (e) {
@@ -44,7 +43,7 @@ class AuthService {
     };
 
     try {
-      var json = jsonEncode({'email': email, 'password': password});
+      var json = jsonEncode({'email': email.toLowerCase(), 'password': password});
 
       final response =
           await http.post(_serviceUrl, headers: _headers, body: json);

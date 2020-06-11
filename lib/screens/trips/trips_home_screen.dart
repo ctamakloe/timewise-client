@@ -134,6 +134,7 @@ class _TripsHomeScreenState extends State<TripsHomeScreen> {
     ];
 
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(60.0),
           child: TimeWiseAppBar(title: 'Trips', actions: [
@@ -141,7 +142,7 @@ class _TripsHomeScreenState extends State<TripsHomeScreen> {
             Container(
               margin: const EdgeInsets.fromLTRB(0, 0, 15, 0),
               child: IconButton(
-                icon: Icon(LineAwesomeIcons.calendar_plus, size: 30.0,),
+                icon: Icon(LineAwesomeIcons.calendar_plus, size: 30.0),
                 onPressed: () {
                   Navigator.pushNamed(context, '/tripPlanner');
                 },

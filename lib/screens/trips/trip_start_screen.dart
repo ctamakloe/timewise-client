@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:time_wise_app/components/app_bar_title.dart';
-import 'package:time_wise_app/components/eval_question.dart';
-import 'package:time_wise_app/components/rating_scale.dart';
 import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/components/tw_flatbutton.dart';
 import 'package:time_wise_app/components/tw_radiobutton_question.dart';
 import 'package:time_wise_app/models/screen_section_data.dart';
 import 'package:time_wise_app/models/trip.dart';
-import 'package:time_wise_app/screens/trips/trip_details/trip_details_screen.dart';
-import 'package:time_wise_app/state_container.dart';
 
 class TripStartScreen extends StatefulWidget {
   final Map arguments;
@@ -31,6 +27,7 @@ class _TripStartScreenState extends State<TripStartScreen> {
     this.trip = widget.arguments['trip'];
 
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(60.0),
           child: TimeWiseAppBar(title: 'Trips • Start')),
@@ -61,7 +58,6 @@ class _TripStartScreenState extends State<TripStartScreen> {
                     context: context,
                     buttonText: 'START TRIP',
                     onPressed: () {
-                      print(_selectedPrepLevel);
                       setState(() {
                         trip.status = 'in-progress';
                         trip.save(context).then((trip) {

@@ -23,6 +23,7 @@ class _AccountHomeScreenState extends State<AccountHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.grey[100],
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(60.0),
             child: TimeWiseAppBar(title: 'Account',

@@ -56,41 +56,47 @@ class _HomeScreenState extends State<HomeScreen> {
 //                .copywith(caption: new textstyle(color: colors.yellow))
       ),
       // sets the inactive color of the `BottomNavigationBar`
-      child: BottomNavigationBar(
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          currentIndex: _currentIndex,
-          onTap: (int index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
-              backgroundColor: Colors.indigoAccent,
-              title: Text('Trips', style: TextStyle(fontSize: 14.0)),
-              icon: Icon(
-                LineAwesomeIcons.train,
-                size: 30.0,
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(width: .5, color: Colors.grey),
+            )),
+        child: BottomNavigationBar(
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            currentIndex: _currentIndex,
+            onTap: (int index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
+                backgroundColor: Colors.indigoAccent,
+                title: Text('Trips', style: TextStyle(fontSize: 14.0)),
+                icon: Icon(
+                  LineAwesomeIcons.train,
+                  size: 30.0,
+                ),
               ),
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.indigoAccent,
-              title: Text('Profile', style: TextStyle(fontSize: 14.0)),
-              icon: Icon(
-                LineAwesomeIcons.bar_chart_1,
-                size: 30.0,
+              BottomNavigationBarItem(
+                backgroundColor: Colors.indigoAccent,
+                title: Text('Profile', style: TextStyle(fontSize: 14.0)),
+                icon: Icon(
+                  LineAwesomeIcons.bar_chart_1,
+                  size: 30.0,
+                ),
               ),
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.indigoAccent,
-              title: Text('Account', style: TextStyle(fontSize: 14.0)),
-              icon: Icon(
-                LineAwesomeIcons.user_circle,
-                size: 30.0,
+              BottomNavigationBarItem(
+                backgroundColor: Colors.indigoAccent,
+                title: Text('Account', style: TextStyle(fontSize: 14.0)),
+                icon: Icon(
+                  LineAwesomeIcons.user_circle,
+                  size: 30.0,
+                ),
               ),
-            ),
-          ]),
+            ]),
+      ),
     );
   }
 

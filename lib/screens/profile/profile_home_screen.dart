@@ -24,6 +24,7 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.grey[100],
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(60.0),
             child: TimeWiseAppBar(

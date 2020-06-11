@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:time_wise_app/components/app_bar_title.dart';
 import 'package:time_wise_app/components/eval_question.dart';
-import 'package:time_wise_app/components/rating_scale.dart';
 import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/components/tw_flatbutton.dart';
+import 'package:time_wise_app/components/tw_radiobutton_question.dart';
 import 'package:time_wise_app/models/screen_section_data.dart';
 import 'package:time_wise_app/models/trip.dart';
-import 'package:time_wise_app/state_container.dart';
 
 class TripEvaluationScreen extends StatefulWidget {
   final Map arguments;
@@ -24,19 +23,26 @@ class TripEvaluationScreen extends StatefulWidget {
 }
 
 class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
-  var isSelectedEmpowerment = [false, false];
-  var isSelectedService = [false, false];
-  var isSelectedInfo = [false, false];
-  var isSelectedCrowding = [false, false];
-  var isSelectedSeat = [false, false];
-  var isSelectedPower = [false, false];
-  var isSelectedTemp = [false, false];
-  var isSelectedNoise = [false, false];
-  var isSelectedCleanliness = [false, false];
-  var isSelectedPrivacy = [false, false];
-  var isSelectedSecurity = [false, false];
-  var isSelectedPassengers = [false, false];
-  var isSelectedStation = [false, false];
+  int _selectedTimeWorth = -1;
+  int _selectedPrepLevel = -1;
+  List<bool> _isSelectedTripExperience = List.generate(5, (_) => false);
+  List<bool> _isSelectedActivities = List.generate(12, (_) => false);
+
+  List<bool> isSelectedWithTimeWise = [false, false];
+  List<bool> isSelectedWithoutTimeWise = [false, false];
+  List<bool> isSelectedAbilityToDo = [false, false];
+  List<bool> isSelectedService = [false, false];
+  List<bool> isSelectedInfo = [false, false];
+  List<bool> isSelectedCrowding = [false, false];
+  List<bool> isSelectedSeat = [false, false];
+  List<bool> isSelectedPower = [false, false];
+  List<bool> isSelectedTemp = [false, false];
+  List<bool> isSelectedNoise = [false, false];
+  List<bool> isSelectedCleanliness = [false, false];
+  List<bool> isSelectedPrivacy = [false, false];
+  List<bool> isSelectedSecurity = [false, false];
+  List<bool> isSelectedPassengers = [false, false];
+  List<bool> isSelectedStation = [false, false];
 
   String notes = '';
 
@@ -52,6 +58,7 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
     ];
 
     return Scaffold(
+        backgroundColor: Colors.grey[100],
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(60.0),
             child: TimeWiseAppBar(title: 'Trips • End')),
@@ -66,30 +73,118 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
             }));
   }
 
-  _tripEvalContent(Trip trip) {
+  Widget _newRatingScale() {
+//    print(_isSelectedTripExperience);
+//    print(_isSelectedTripExperience.indexWhere((element) => element == true));
+
+    return ToggleButtons(
+      children: <Widget>[
+        Icon(LineAwesomeIcons.loudly_crying_face, size: 40.0),
+        Icon(LineAwesomeIcons.frowning_face, size: 40.0),
+        Icon(LineAwesomeIcons.neutral_face, size: 40.0),
+        Icon(LineAwesomeIcons.smiling_face, size: 40.0),
+        Icon(LineAwesomeIcons.grinning_face_with_smiling_eyes, size: 40.0),
+      ],
+      selectedColor: Colors.white,
+      fillColor: Colors.indigo[300],
+      borderColor: Colors.transparent,
+      selectedBorderColor: Colors.transparent,
+      isSelected: _isSelectedTripExperience,
+      onPressed: (int index) {
+        setState(() {
+          for (int buttonIndex = 0;
+              buttonIndex < _isSelectedTripExperience.length;
+              buttonIndex++) {
+            if (buttonIndex == index)
+              _isSelectedTripExperience[buttonIndex] = true;
+            else
+              _isSelectedTripExperience[buttonIndex] = false;
+          }
+        });
+      },
+    );
+  }
+
+  Widget _activityPicker() {
+//    print(_isSelectedActivities);
+//    print(_isSelectedActivities.indexWhere((element) => element == true));
+
+    return Container(
+      height: 170.0,
+      child: Scrollbar(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ToggleButtons(
+            children: <Widget>[
+              _activityTile('Eat or drink', LineAwesomeIcons.hamburger),
+              _activityTile('Make phone calls or send messages',
+                  LineAwesomeIcons.mobile_phone),
+              _activityTile('Read', LineAwesomeIcons.book_open),
+              _activityTile('Write or edit documents', LineAwesomeIcons.edit),
+              _activityTile(
+                  'Browse the Internet (social media, travel info, etc.)',
+                  LineAwesomeIcons.globe),
+              _activityTile('Watch videos', LineAwesomeIcons.film),
+              _activityTile('Listen to music, podcasts, audio books or radio',
+                  LineAwesomeIcons.headphones),
+              _activityTile('Play games', LineAwesomeIcons.gamepad),
+              _activityTile('Take a nap', LineAwesomeIcons.bed),
+              _activityTile(
+                  'Talk to other passengers', LineAwesomeIcons.user_friends),
+              _activityTile('Care for other passengers',
+                  LineAwesomeIcons.universal_access),
+              _activityTile('Other', LineAwesomeIcons.question_circle),
+            ],
+            borderWidth: 5.0,
+            selectedColor: Colors.white,
+            fillColor: Colors.indigo[300],
+            borderColor: Colors.transparent,
+            selectedBorderColor: Colors.transparent,
+            isSelected: _isSelectedActivities,
+            onPressed: (int index) {
+              setState(() {
+                _isSelectedActivities[index] = !_isSelectedActivities[index];
+              });
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _tripEvalContent(Trip trip) {
     return Container(
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: [
-//        _evalTitle()
           EvalQuestion('How was your trip?'),
-          RatingScale(scaleType: 'emoji'),
+          _newRatingScale(),
           _divider(),
           EvalQuestion('What did you do?'),
           _activityPicker(),
           _divider(),
-          EvalQuestion('Was your travel time worthwhile or wasted?'),
-          RatingScale(
-            scaleType: 'circle',
-            minText: 'All time was wasted',
-            maxText: 'All time was worth while',
-          ),
+          TWRadioButtonQuestion(
+              context: context,
+              selectedValue: _selectedTimeWorth,
+              onChanged: (value) => setState(() {
+                    _selectedTimeWorth = value;
+                  }),
+              minLabel: 'All time was wasted',
+              maxLabel: 'All time was worthwhile',
+              questionText: 'Was your travel time worthwhile or wasted?'),
           _divider(),
           _customEvalQuestion(),
           _experienceFactorRater(),
           _divider(),
-          EvalQuestion('Could you have prepared better?'),
-          RatingScale(scaleType: 'like'),
+          TWRadioButtonQuestion(
+              context: context,
+              selectedValue: _selectedPrepLevel,
+              onChanged: (value) => setState(() {
+                    _selectedPrepLevel = value;
+                  }),
+              minLabel: 'I could have done more',
+              maxLabel: 'I was well prepared',
+              questionText: 'Looking back, how adequate was your preparation?'),
           _divider(),
           _tripNotes(),
           _divider(),
@@ -100,10 +195,7 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
             onPressed: () {
               setState(() {
                 trip.status = 'completed';
-
                 trip.save(context).then((trip) {
-//                  StateContainer.of(context).setShouldRefreshTrips(true);
-
                   Scaffold.of(context)
                       .showSnackBar(SnackBar(content: Text('Trip ended')));
                   Navigator.pop(context, trip);
@@ -116,58 +208,26 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
     );
   }
 
-  _tripNotes() {
-    return Container(
-      child: Column(children: [
-        EvalQuestion('What would you like to remember for this trip?'),
-        SizedBox(
-          height: 10.0,
-        ),
-        TextField(
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.edit,
-                color: Colors.indigo,
-              ),
-            ),
-//            maxLines: 4,
-            onChanged: (text) => {this.notes = text}),
-      ]),
-    );
-  }
-
-  _divider() {
-    return Column(
-      children: [
-        SizedBox(height: 10.0),
-        Divider(),
-        SizedBox(height: 10.0),
-      ],
-    );
-  }
-
   Widget _customEvalQuestion() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        style: TextStyle(
-            fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.bold),
+    TextStyle style = TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
+
+    return Container(
+      child: Column(
         children: [
-          TextSpan(text: 'What made it \nworthwhile ('),
-          WidgetSpan(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0),
-              child: Icon(LineAwesomeIcons.thumbs_up),
-            ),
+          Row(
+            children: [],
           ),
-          TextSpan(text: ') or wasted ('),
-          WidgetSpan(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0),
-              child: Icon(LineAwesomeIcons.thumbs_down),
-            ),
-          ),
-          TextSpan(text: ')?'),
+          Text('What made it ', style: style),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('wasted (', style: style),
+              Icon(LineAwesomeIcons.thumbs_down),
+              Text(') or worthwhile (', style: style),
+              Icon(LineAwesomeIcons.thumbs_up),
+              Text(')?', style: style)
+            ],
+          )
         ],
       ),
     );
@@ -175,13 +235,17 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
 
   Widget _experienceFactorRater() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
+//      padding: EdgeInsets.symmetric(vertical: 5.0),
       height: 200.0,
       child: Scrollbar(
         child: SingleChildScrollView(
           child: Column(children: [
+            _experienceFactorRating('Preparation with TimeWise',
+                LineAwesomeIcons.app_store, isSelectedWithTimeWise),
+            _experienceFactorRating('Preparation without TimeWise',
+                LineAwesomeIcons.app_store, isSelectedWithoutTimeWise),
             _experienceFactorRating('Ability to do what you wanted',
-                LineAwesomeIcons.raised_fist, isSelectedEmpowerment),
+                LineAwesomeIcons.raised_fist, isSelectedAbilityToDo),
             _experienceFactorRating('Train reliability & punctuality',
                 LineAwesomeIcons.stopwatch, isSelectedService),
             _experienceFactorRating('Information availability & accuracy',
@@ -217,6 +281,7 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(flex: 1, child: Icon(icon, size: 30.0)),
           Expanded(
@@ -226,13 +291,14 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
                 style: TextStyle(fontSize: 16.0),
               )),
           Expanded(
-            flex: 2,
+            flex: 3,
             child: ToggleButtons(
-              color: Colors.indigo,
-              fillColor: Colors.indigo,
-              borderColor: Colors.indigo,
+              color: Colors.indigo[300],
+              fillColor: Colors.indigo[300],
+              borderColor: Colors.indigo[300],
+              borderWidth: 2.0,
               selectedColor: Colors.white,
-              selectedBorderColor: Colors.indigo,
+              selectedBorderColor: Colors.indigo[300],
               borderRadius: BorderRadius.circular(5.0),
               children: [
                 Icon(LineAwesomeIcons.thumbs_down),
@@ -259,41 +325,9 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
     );
   }
 
-  _activityPicker() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      height: 160.0,
-      child: Scrollbar(
-        child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _activityTile('Eat or drink', LineAwesomeIcons.hamburger),
-                _activityTile('Make phone calls or send messages',
-                    LineAwesomeIcons.mobile_phone),
-                _activityTile('Read', LineAwesomeIcons.book_open),
-                _activityTile('Write or edit documents', LineAwesomeIcons.edit),
-                _activityTile(
-                    'Browse the Internet (social media, travel info, etc.)',
-                    LineAwesomeIcons.globe),
-                _activityTile('Watch videos', LineAwesomeIcons.film),
-                _activityTile('Listen to music, podcasts, audio books or radio',
-                    LineAwesomeIcons.headphones),
-                _activityTile('Play games', LineAwesomeIcons.gamepad),
-                _activityTile('Take a nap', LineAwesomeIcons.bed),
-                _activityTile(
-                    'Talk to other passengers', LineAwesomeIcons.user_friends),
-                _activityTile('Care for other passengers',
-                    LineAwesomeIcons.universal_access),
-              ],
-            )),
-      ),
-    );
-  }
-
   Widget _activityTile(String label, IconData icon) {
     return Container(
+      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
       margin: const EdgeInsets.symmetric(horizontal: 5.0),
       width: 110.0,
       child: Column(
@@ -302,7 +336,6 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
           Icon(
             icon,
             size: 50.0,
-            color: Colors.indigo,
           ),
           SizedBox(height: 20.0),
           Flexible(
@@ -313,6 +346,35 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
               )),
         ],
       ),
+    );
+  }
+
+  Widget _divider() {
+    return Column(
+      children: [
+        SizedBox(height: 10.0),
+        Divider(),
+        SizedBox(height: 10.0),
+      ],
+    );
+  }
+
+  Widget _tripNotes() {
+    return Container(
+      child: Column(children: [
+        EvalQuestion('What would you like to remember for this trip?'),
+        SizedBox(
+          height: 10.0,
+        ),
+        TextField(
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                Icons.edit,
+                color: Colors.indigo,
+              ),
+            ),
+            onChanged: (text) => {this.notes = text}),
+      ]),
     );
   }
 }

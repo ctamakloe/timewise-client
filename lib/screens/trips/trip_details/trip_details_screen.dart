@@ -72,6 +72,7 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
 //    }
 
     return Scaffold(
+        backgroundColor: Colors.grey[100],
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(60.0),
             child: TimeWiseAppBar(title: 'Trips • Details')),

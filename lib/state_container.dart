@@ -94,7 +94,7 @@ class StateContainerState extends State<StateContainer> {
 
   getAppEnvironment() {
     appState = getAppState();
-    if (appState.environment == null) appState.environment = 'development';
+    if (appState.environment == null) appState.environment = 'production';
     return appState.environment;
   }
 
@@ -103,7 +103,7 @@ class StateContainerState extends State<StateContainer> {
 
     switch (environment) {
       case 'production':
-        return 'http://timewiseapi.herokuapp.com';
+        return 'https://timewiseapi.herokuapp.com';
         break;
       case 'development':
         return 'http://localhost:3000';
