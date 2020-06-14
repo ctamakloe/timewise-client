@@ -7,12 +7,9 @@ import 'package:time_wise_app/models/screen_section_data.dart';
 import 'package:time_wise_app/models/trip.dart';
 
 class TripStartScreen extends StatefulWidget {
-  final Map arguments;
+  final Trip trip;
 
-  TripStartScreen(
-    this.arguments, {
-    Key key,
-  }) : super(key: key);
+  TripStartScreen({Key key, @required this.trip});
 
   @override
   _TripStartScreenState createState() => _TripStartScreenState();
@@ -24,13 +21,13 @@ class _TripStartScreenState extends State<TripStartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    this.trip = widget.arguments['trip'];
+    this.trip = widget.trip;
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(60.0),
-          child: TimeWiseAppBar(title: 'Trips • Start')),
+          child: TimeWiseAppBar(title: 'Trip • Start')),
       body: ScreenSection(
         sectionTitle: '',
         sectionAction: SectionAction(),
@@ -60,9 +57,7 @@ class _TripStartScreenState extends State<TripStartScreen> {
                     onPressed: () {
                       setState(() {
                         trip.status = 'in-progress';
-                        trip.save(context).then((trip) {
-//                          StateContainer.of(context).setShouldRefreshTrips(true);
-
+                        trip.update(context).then((trip) {
                           Scaffold.of(context).showSnackBar(
                               SnackBar(content: Text('Trip started')));
                           Navigator.pop(context, trip);

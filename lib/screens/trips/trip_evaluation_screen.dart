@@ -9,14 +9,17 @@ import 'package:time_wise_app/models/screen_section_data.dart';
 import 'package:time_wise_app/models/trip.dart';
 
 class TripEvaluationScreen extends StatefulWidget {
-  final Map arguments;
   final Trip trip;
 
-  TripEvaluationScreen(
-    this.arguments, {
-    Key key,
-  })  : trip = arguments['trip'],
-        super(key: key);
+  TripEvaluationScreen({Key key, @required this.trip});
+
+//  final Map arguments;
+//  final Trip trip;
+//  TripEvaluationScreen(
+//    this.arguments, {
+//    Key key,
+//  })  : trip = arguments['trip'],
+//        super(key: key);
 
   @override
   _TripEvaluationScreenState createState() => _TripEvaluationScreenState();
@@ -43,8 +46,19 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
   List<bool> isSelectedSecurity = [false, false];
   List<bool> isSelectedPassengers = [false, false];
   List<bool> isSelectedStation = [false, false];
+  List<bool> isSelectedOther = [false, false];
 
   String notes = '';
+
+  // Saved data
+  Trip _setTripAttributes(Trip trip) {
+    trip.status = 'completed';
+    trip.rating =
+        (_isSelectedTripExperience.indexWhere((flag) => flag) + 1).toString();
+
+//    print('rating is: ${trip.rating}');
+    return trip;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +75,7 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
         backgroundColor: Colors.grey[100],
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(60.0),
-            child: TimeWiseAppBar(title: 'Trips • End')),
+            child: TimeWiseAppBar(title: 'Trip • End')),
         body: ListView.builder(
             itemCount: sectionsData.length,
             itemBuilder: (context, index) {
@@ -194,8 +208,8 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
             buttonText: 'END TRIP',
             onPressed: () {
               setState(() {
-                trip.status = 'completed';
-                trip.save(context).then((trip) {
+                Trip updatedTrip = _setTripAttributes(trip);
+                updatedTrip.update(context).then((trip) {
                   Scaffold.of(context)
                       .showSnackBar(SnackBar(content: Text('Trip ended')));
                   Navigator.pop(context, trip);
@@ -227,7 +241,14 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
               Icon(LineAwesomeIcons.thumbs_up),
               Text(')?', style: style)
             ],
-          )
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: Text(
+              'Rate all that apply',
+              style: TextStyle(fontSize: 14.0),
+            ),
+          ),
         ],
       ),
     );
@@ -236,7 +257,7 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
   Widget _experienceFactorRater() {
     return Container(
 //      padding: EdgeInsets.symmetric(vertical: 5.0),
-      height: 200.0,
+      height: 300.0,
       child: Scrollbar(
         child: SingleChildScrollView(
           child: Column(children: [
@@ -270,6 +291,8 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
                 LineAwesomeIcons.user_friends, isSelectedPassengers),
             _experienceFactorRating(
                 'Station', LineAwesomeIcons.archway, isSelectedStation),
+            _experienceFactorRating(
+                'Other', LineAwesomeIcons.archway, isSelectedOther),
           ]),
         ),
       ),
@@ -277,7 +300,7 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
   }
 
   Widget _experienceFactorRating(
-      String label, IconData icon, List<bool> isSelected) {
+      String label, IconData icon, List<bool> isSelectedFlag) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
@@ -307,17 +330,17 @@ class _TripEvaluationScreenState extends State<TripEvaluationScreen> {
               onPressed: (int index) {
                 setState(() {
                   for (int buttonIndex = 0;
-                      buttonIndex < isSelected.length;
+                      buttonIndex < isSelectedFlag.length;
                       buttonIndex++) {
                     if (buttonIndex == index) {
-                      isSelected[buttonIndex] = true;
+                      isSelectedFlag[buttonIndex] = true;
                     } else {
-                      isSelected[buttonIndex] = false;
+                      isSelectedFlag[buttonIndex] = false;
                     }
                   }
                 });
               },
-              isSelected: isSelected,
+              isSelected: isSelectedFlag,
             ),
           ),
         ],

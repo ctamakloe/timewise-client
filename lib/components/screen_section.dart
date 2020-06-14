@@ -49,7 +49,7 @@ class _ScreenSectionState extends State<ScreenSection> {
             widget.sectionTitle,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 16.0,
+              fontSize: 14.0,
             ),
           ),
           _buildSectionAction(),

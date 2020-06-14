@@ -1,24 +1,35 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:time_wise_app/components/app_bar_title.dart';
+import 'package:time_wise_app/components/screen_section.dart';
 import 'package:time_wise_app/components/train_schedule_tile.dart';
 import 'package:time_wise_app/components/tw_autocomplete_textfield.dart';
 import 'package:time_wise_app/components/tw_flatbutton.dart';
 import 'package:time_wise_app/components/tw_toggle_buttons.dart';
 import 'package:time_wise_app/models/api/api_train_schedule.dart';
-import 'package:time_wise_app/models/station.dart';
+import 'package:time_wise_app/models/screen_section_data.dart';
+import 'package:time_wise_app/screens/trips/trip_details_screen.dart';
 import 'package:time_wise_app/services/train_schedule_service.dart';
 import 'package:time_wise_app/services/trip_service.dart';
+import 'package:time_wise_app/state_container.dart';
 
-class WizardContent extends StatefulWidget {
+class TripPlannerScreen extends StatefulWidget {
+  final Function() onTripCreated;
+
+  TripPlannerScreen({Key key, @required this.onTripCreated}) : super(key: key);
+
   @override
-  _WizardContentState createState() => _WizardContentState();
+  _TripPlannerScreenState createState() => _TripPlannerScreenState();
 }
 
-class _WizardContentState extends State<WizardContent> {
+class _TripPlannerScreenState extends State<TripPlannerScreen> {
   // stepper
   List<Step> _steps = [];
   int _currentStep = 0;
+
+  static DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+  static DateFormat _timeFormat = DateFormat.Hm();
 
 //  bool _complete = false;
 
@@ -26,22 +37,23 @@ class _WizardContentState extends State<WizardContent> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _fromStationController = TextEditingController();
   TextEditingController _toStationController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
+  TextEditingController _dateController =
+      TextEditingController(text: _dateFormat.format(DateTime.now()));
+  TextEditingController _timeController =
+      TextEditingController(text: _timeFormat.format(DateTime.now()));
 
   // form => step 2
   int _selectedScheduleId = -1;
 
   // form => step 3
   TextEditingController _purposeController = TextEditingController();
-  String _tripType;
-  String _travelDirection;
-  List<bool> _isSelectedDir = [false, false]; //[outbound, return]
-  List<bool> _isSelectedType = [false, false]; // non-business, business
+  String _rating = '0';
+  String _tripType = 'non-business';
+  String _travelDirection = 'outbound';
+  List<bool> _isSelectedDir = [true, false]; //[outbound, return]
+  List<bool> _isSelectedType = [true, false];
 
-  // data
-  Station startStation;
-  Station endStation;
+  double _stepContainerHeight;
 
   bool isFirstStep() => _currentStep == 0;
 
@@ -52,31 +64,35 @@ class _WizardContentState extends State<WizardContent> {
   int lastStep() => _steps.length;
 
   next() {
-//    _currentStep + 1 != _steps.length
-//        ? goTo(_currentStep + 1)
-//        : setState(() => _complete = true);
-
     if (nextStep() != lastStep()) {
       goTo(nextStep());
     } else {
-//      trip = TripService.createTrip(_tripFormData)
-//      if this returns a trip, navigate to trip page
-//      else show message
       TripFormData _formData = TripFormData();
       _formData.scheduleId = _selectedScheduleId;
       _formData.tripPurpose = _purposeController.text;
       _formData.tripType = _tripType;
       _formData.travelDirection = _travelDirection;
-      _formData.rating = '0';
+      _formData.rating = _rating;
 
       var tripService = TripService();
 
-      tripService.createTrip(context, _formData).then((value) {
+      tripService.createTrip(context, _formData).then((trip) {
         setState(() {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/tripDetails', ModalRoute.withName('/'),
-              arguments: value);
-//          _complete = true;
+          // Show newly created trip details
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => TripDetailsScreen(
+                      trip: trip,
+                      onTripChanged: widget.onTripCreated,
+                    )),
+            ModalRoute.withName('/'),
+          );
+
+          // refresh trip list from server
+          StateContainer.of(context).loadTrips().then((trips) {
+            widget.onTripCreated();
+          });
         });
       });
     }
@@ -106,12 +122,11 @@ class _WizardContentState extends State<WizardContent> {
     _timeController.clear();
     _dateController.clear();
     _purposeController.clear();
-    _travelDirection = '';
-    _tripType = '';
+    _travelDirection = 'outbound';
+    _tripType = 'non-business';
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildTripPlanner() {
     _steps = [
       _buildStepOne(),
       _buildStepTwo(),
@@ -119,56 +134,51 @@ class _WizardContentState extends State<WizardContent> {
     ];
 
     return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Form(
-              key: this._formKey,
-              child: Stepper(
-                type: StepperType.vertical,
-                steps: _steps,
-                currentStep: _currentStep,
-                onStepContinue: next,
-                onStepCancel: cancel,
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        child: Form(
+          key: this._formKey,
+          child: Stepper(
+            type: StepperType.horizontal,
+            steps: _steps,
+            currentStep: _currentStep,
+            onStepContinue: next,
+            onStepCancel: cancel,
 //                onStepTapped: (step) => goTo(step),
-                controlsBuilder: (BuildContext context,
-                        {VoidCallback onStepContinue,
-                        VoidCallback onStepCancel}) =>
-                    Container(
-                  height: 160.0,
-                  padding: EdgeInsets.fromLTRB(0, 30.0, 0, 0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TWFlatButton(
-                        inverted: false,
-                        context: context,
-                        buttonText: isLastStep() ? 'CREATE TRIP PLAN' : 'NEXT',
-                        onPressed: onStepContinue,
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      TWFlatButton(
-                        inverted: true,
-                        context: context,
-                        buttonText: isFirstStep() ? 'CLEAR' : 'BACK',
-                        onPressed: onStepCancel,
-                      ),
-                    ],
+            controlsBuilder: (BuildContext context,
+                    {VoidCallback onStepContinue, VoidCallback onStepCancel}) =>
+                Container(
+//            height: 100.0,
+              padding: EdgeInsets.fromLTRB(0, 20.0, 0, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * .4,
+                    child: TWFlatButton(
+                      inverted: false,
+                      context: context,
+                      buttonText: isLastStep() ? 'FINISH' : 'NEXT',
+                      onPressed: onStepContinue,
+                    ),
                   ),
-                ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * .4,
+                    child: TWFlatButton(
+                      inverted: true,
+                      context: context,
+                      buttonText: isFirstStep() ? 'CLEAR' : 'BACK',
+                      onPressed: onStepCancel,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
-
-  DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
-  DateFormat _timeFormat = DateFormat.Hm();
 
   _buildStepOne() {
     return Step(
@@ -176,6 +186,7 @@ class _WizardContentState extends State<WizardContent> {
       isActive: _currentStep == 0 ? true : false,
       state: _currentStep == 0 ? StepState.editing : StepState.complete,
       content: Container(
+        height: _stepContainerHeight,
         child: Column(
           children: [
             TWStationAutoCompleteTextField(
@@ -273,7 +284,7 @@ class _WizardContentState extends State<WizardContent> {
 
   _buildScheduleList(list) {
     return Container(
-      height: 300.0,
+      height: _stepContainerHeight,
       child: Scrollbar(
         child: ListView.builder(
             itemCount: list.length,
@@ -307,9 +318,17 @@ class _WizardContentState extends State<WizardContent> {
     );
   }
 
+  String _getStationCode(TextEditingController controller) {
+    String code = '';
+    String codeWithLastBracket = controller.text.split('(').last;
+    // remove ending braces
+    code = codeWithLastBracket.replaceAll(')', '');
+    return code;
+  }
+
   _buildStepTwo() {
     return Step(
-      title: const Text('Select Train'),
+      title: const Text('Train'),
       isActive: _currentStep == 1 ? true : false,
       state: _currentStep == 1 ? StepState.editing : StepState.complete,
       content: _scheduleList.isNotEmpty
@@ -317,15 +336,15 @@ class _WizardContentState extends State<WizardContent> {
           : FutureBuilder(
               future: TrainScheduleService().getTrainSchedules(
                 context,
-                _fromStationController.text,
-                _toStationController.text,
+                _getStationCode(_fromStationController),
+                _getStationCode(_toStationController),
                 _dateController.text,
                 _timeController.text,
               ),
               builder: (context, schedulesSnap) {
                 if (schedulesSnap.data == null)
                   return Container(
-                    height: 300.0,
+                    height: _stepContainerHeight,
                     child: Center(
                       child: Text(
                         'Unable to retrieve train schedules!',
@@ -352,110 +371,140 @@ class _WizardContentState extends State<WizardContent> {
       isActive: _currentStep == 2 ? true : false,
       state: _currentStep == 2 ? StepState.editing : StepState.complete,
       content: Container(
+        height: _stepContainerHeight,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
               decoration: InputDecoration(
-                  labelText: 'Trip Purpose', hintText: 'Day trip to ...'),
+                  labelText: 'Reason for travelling',
+                  hintText: 'Day trip to ...'),
               controller: _purposeController,
             ),
-            SizedBox(height: 30.0),
-            Row(
+            SizedBox(height: 15.0),
+            Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Travel Direction',
-                  style: TextStyle(fontSize: 16.0),
+                  'Direction of trip',
+                  style: TextStyle(fontSize: 16.0, color: Colors.grey[600]),
                 ),
-                ToggleButtons(
-                  color: Colors.indigo,
-                  fillColor: Colors.indigo[300],
-                  borderColor: Colors.indigo[300],
-                  selectedColor: Colors.white,
-                  selectedBorderColor: Colors.indigo[300],
-                  borderRadius: BorderRadius.circular(5.0),
-                  children: [
-                    TWToggleButton(
-                      child: Text(
-                        'Outbound',
-                        style: TextStyle(fontSize: 14.0),
+                SizedBox(height: 5.0),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
+                  child: ToggleButtons(
+                    color: Colors.indigo,
+                    fillColor: Colors.indigo[300],
+                    borderColor: Colors.indigo[300],
+                    selectedColor: Colors.white,
+                    selectedBorderColor: Colors.indigo[300],
+                    borderRadius: BorderRadius.circular(5.0),
+                    children: [
+                      TWToggleButton(
+                        child: Text(
+                          'Outbound',
+                          style: TextStyle(fontSize: 14.0),
+                        ),
+                        width: 110.0,
                       ),
-                      width: 90.0,
-                    ),
-                    TWToggleButton(
-                      child: Text(
-                        'Return',
-                        style: TextStyle(fontSize: 14.0),
+                      TWToggleButton(
+                        child: Text(
+                          'Return',
+                          style: TextStyle(fontSize: 14.0),
+                        ),
+                        width: 110.0,
                       ),
-                      width: 90.0,
-                    ),
-                  ],
-                  onPressed: (int index) {
-                    setState(() {
-                      for (int buttonIndex = 0;
-                          buttonIndex < _isSelectedDir.length;
-                          buttonIndex++) {
-                        if (buttonIndex == index) {
-                          _isSelectedDir[buttonIndex] = true;
-                        } else {
-                          _isSelectedDir[buttonIndex] = false;
+                    ],
+                    onPressed: (int index) {
+                      setState(() {
+                        for (int buttonIndex = 0;
+                            buttonIndex < _isSelectedDir.length;
+                            buttonIndex++) {
+                          if (buttonIndex == index) {
+                            _isSelectedDir[buttonIndex] = true;
+                          } else {
+                            _isSelectedDir[buttonIndex] = false;
+                          }
                         }
-                      }
-                      this._travelDirection =
-                          _isSelectedDir[0] == true ? 'outbound' : 'return';
-                    });
-                  },
-                  isSelected: _isSelectedDir,
+                        this._travelDirection =
+                            _isSelectedDir[0] == true ? 'outbound' : 'return';
+                      });
+                    },
+                    isSelected: _isSelectedDir,
+                  ),
                 )
               ],
             ),
-            SizedBox(height: 30.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SizedBox(height: 15.0),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Trip Type',
-                  style: TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: 16.0, color: Colors.grey[600]),
                 ),
-                ToggleButtons(
-                  color: Colors.indigo,
-                  fillColor: Colors.indigo[300],
-                  borderColor: Colors.indigo[300],
-                  selectedColor: Colors.white,
-                  selectedBorderColor: Colors.indigo[300],
-                  borderRadius: BorderRadius.circular(5.0),
-                  children: [
-                    TWToggleButton(
-                      child: Text('Non-Business'),
-                      width: 110.0,
-                    ),
-                    TWToggleButton(
-                      child: Text('Business'),
-                      width: 110.0,
-                    ),
-                  ],
-                  onPressed: (int index) {
-                    setState(() {
-                      for (int buttonIndex = 0;
-                          buttonIndex < _isSelectedType.length;
-                          buttonIndex++) {
-                        if (buttonIndex == index) {
-                          _isSelectedType[buttonIndex] = true;
-                        } else {
-                          _isSelectedType[buttonIndex] = false;
+                SizedBox(height: 5.0),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
+                  child: ToggleButtons(
+                    color: Colors.indigo,
+                    fillColor: Colors.indigo[300],
+                    borderColor: Colors.indigo[300],
+                    selectedColor: Colors.white,
+                    selectedBorderColor: Colors.indigo[300],
+                    borderRadius: BorderRadius.circular(5.0),
+                    children: [
+                      TWToggleButton(
+                        child: Text('Non-Business'),
+                        width: 110.0,
+                      ),
+                      TWToggleButton(
+                        child: Text('Business'),
+                        width: 110.0,
+                      ),
+                    ],
+                    onPressed: (int index) {
+                      setState(() {
+                        for (int buttonIndex = 0;
+                            buttonIndex < _isSelectedType.length;
+                            buttonIndex++) {
+                          if (buttonIndex == index) {
+                            _isSelectedType[buttonIndex] = true;
+                          } else {
+                            _isSelectedType[buttonIndex] = false;
+                          }
                         }
-                      }
-                      this._tripType = _isSelectedType[0] == true
-                          ? 'non-business'
-                          : 'business';
-                    });
-                  },
-                  isSelected: _isSelectedType,
+                        this._tripType = _isSelectedType[0] == true
+                            ? 'non-business'
+                            : 'business';
+                      });
+                    },
+                    isSelected: _isSelectedType,
+                  ),
                 ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _stepContainerHeight = MediaQuery.of(context).size.height * .42;
+
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60.0),
+          child: TimeWiseAppBar(title: 'Trip Planner')),
+      body: ScreenSection(
+        sectionTitle: 'PLAN A TRIP',
+        sectionAction: SectionAction(),
+        sectionContent: _buildTripPlanner(),
       ),
     );
   }

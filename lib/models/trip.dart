@@ -66,8 +66,12 @@ class Trip {
 
   void end() => this.status = 'completed';
 
-  save(BuildContext context) {
+  update(BuildContext context) {
     return TripService().updateTrip(context, this);
+  }
+
+  delete(BuildContext context) {
+    return TripService().deleteTrip(context, this);
   }
 
   Trip.fromJson(Map<String, dynamic> json) {
@@ -136,7 +140,7 @@ class Trip {
 //        stopTime: '11:09',
         dataCells: [
           TripLegDataCell('11:09', 10, '5'),
-          TripLegDataCell('11:18', 10, '5'),
+          TripLegDataCell('11:10', 10, '5'),
         ]),
     TripLeg(
         startStation: 'Loughborough',
@@ -202,6 +206,9 @@ class Trip {
 //        stopTime: '12:38',
         dataCells: [
           TripLegDataCell('12:38', 10, '1'),
+          TripLegDataCell('12:48', 10, '1'),
+          TripLegDataCell('12:58', 10, '1'),
+          TripLegDataCell('13:08', 10, '1'),
           TripLegDataCell('13:10', 10, '1')
         ]),
   ];

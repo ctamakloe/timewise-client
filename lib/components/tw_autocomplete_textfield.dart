@@ -1,6 +1,7 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:time_wise_app/models/station.dart';
+import 'package:time_wise_app/state_container.dart';
 
 class TWStationAutoCompleteTextField extends StatelessWidget {
   const TWStationAutoCompleteTextField({
@@ -19,7 +20,7 @@ class TWStationAutoCompleteTextField extends StatelessWidget {
     return AutoCompleteTextField<Station>(
       controller: formController,
       clearOnSubmit: false,
-      suggestions: Station.getStations(),
+      suggestions: StateContainer.of(context).getAppState().stations, //Station.getStations(),
       style: TextStyle(color: Colors.black, fontSize: 16.0),
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.fromLTRB(0, 30, 10, 10),
@@ -34,7 +35,7 @@ class TWStationAutoCompleteTextField extends StatelessWidget {
         return a.name.compareTo(b.name);
       },
       itemSubmitted: (item) {
-        formController.text = item.code;
+        formController.text = '${item.name} (${item.code})';
       },
       itemBuilder: (context, item) {
         return Container(

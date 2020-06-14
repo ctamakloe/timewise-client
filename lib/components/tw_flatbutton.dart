@@ -26,11 +26,11 @@ class TWFlatButton extends StatelessWidget {
               fontSize: 18,
             ),
           ),
-          shape: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: inverted ? Colors.indigo[300] : Colors.white, width: 2),
-            borderRadius: BorderRadius.circular(5),
-          ),
+//          shape: OutlineInputBorder(
+//            borderSide: BorderSide(
+//                color: inverted ? Colors.indigo[300] : Colors.white, width: 2),
+//            borderRadius: BorderRadius.circular(5),
+//          ),
           padding: const EdgeInsets.all(15.0),
           textColor: this.inverted ? Colors.indigo : Colors.white,
           color: this.inverted ? Colors.white : Colors.indigo[300],

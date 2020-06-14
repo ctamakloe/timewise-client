@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:time_wise_app/models/train_schedule.dart';
 
 class TrainScheduleTile extends StatelessWidget {
@@ -14,28 +13,36 @@ class TrainScheduleTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(width: 1.0, color: Colors.grey[200]),
-        )
-      ),
+          border: Border(
+        bottom: BorderSide(width: 1.0, color: Colors.grey[200]),
+      )),
       padding: const EdgeInsets.symmetric(vertical: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _stationTime(schedule.startStation.name,
-              DateFormat.Hm().format(schedule.departureTime)),
-          Icon(
-            Icons.arrow_forward,
-            color: Colors.grey,
+          Flexible(
+            flex: 3,
+            child: _stationInfo(schedule.startStation.name,
+                DateFormat.Hm().format(schedule.departureTime)),
           ),
-          _stationTime(schedule.endStation.name,
-              DateFormat.Hm().format(schedule.arrivalTime)),
+          Flexible(
+            flex: 1,
+            child: Icon(
+              Icons.arrow_forward,
+              color: Colors.grey,
+            ),
+          ),
+          Flexible(
+            flex: 3,
+            child: _stationInfo(schedule.endStation.name,
+                DateFormat.Hm().format(schedule.arrivalTime)),
+          ),
         ],
       ),
     );
   }
 
-  _stationTime(String stationName, String time) {
+  _stationInfo(String stationName, String time) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -43,12 +50,18 @@ class TrainScheduleTile extends StatelessWidget {
           time,
           style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 5.0,),
-        Text(
-          stationName,
-          style: TextStyle(
-        fontSize: 14.0,
-        color: Colors.grey,
+        SizedBox(
+          height: 5.0,
+        ),
+        Container(
+//          width: 100.0,
+          child: Text(
+            stationName,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.grey,
+            ),
           ),
         ),
       ],

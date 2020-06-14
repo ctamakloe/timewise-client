@@ -8,20 +8,24 @@ import 'package:time_wise_app/components/tw_flatbutton.dart';
 import 'package:time_wise_app/models/trip.dart';
 import 'package:time_wise_app/screens/trips/trip_evaluation_screen.dart';
 import 'package:time_wise_app/screens/trips/trip_start_screen.dart';
+import 'package:time_wise_app/services/trip_service.dart';
+import 'package:time_wise_app/state_container.dart';
 
-class TripDetailsContent extends StatefulWidget {
-  TripDetailsContent({
+class TripInfoContent extends StatefulWidget {
+  TripInfoContent({
     Key key,
     @required this.trip,
+    @required this.onTripChanged,
   }) : super(key: key);
 
-  Trip trip;
+  final Trip trip;
+  final Function() onTripChanged;
 
   @override
-  _TripDetailsContentState createState() => _TripDetailsContentState();
+  _TripInfoContentState createState() => _TripInfoContentState();
 }
 
-class _TripDetailsContentState extends State<TripDetailsContent> {
+class _TripInfoContentState extends State<TripInfoContent> {
   @override
   Widget build(BuildContext context) {
     Trip _trip = widget.trip;
@@ -36,7 +40,9 @@ class _TripDetailsContentState extends State<TripDetailsContent> {
 // origin - destination
           Column(
             children: [
-              SizedBox(height: 20.0,),
+              SizedBox(
+                height: 20.0,
+              ),
               Text(
                 _trip.originStationName,
                 textAlign: TextAlign.left,
@@ -234,13 +240,14 @@ class _TripDetailsContentState extends State<TripDetailsContent> {
             _navigateAndDisplaySelection(
               context,
               trip,
-              TripStartScreen({'trip': trip}),
+              TripStartScreen(trip: trip),
             );
           } else if (trip.isInProgress()) {
             _navigateAndDisplaySelection(
               context,
               trip,
-              TripEvaluationScreen({'trip': trip}),
+//              TripEvaluationScreen({'trip': trip}),
+              TripEvaluationScreen(trip: trip),
             );
           }
         });
@@ -260,6 +267,9 @@ class _TripDetailsContentState extends State<TripDetailsContent> {
     if (result != null) {
       setState(() {
         trip = result;
+        StateContainer.of(context).loadTrips().then((trips) {
+          widget.onTripChanged();
+        });
       });
     }
   }

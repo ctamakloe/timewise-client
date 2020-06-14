@@ -273,7 +273,7 @@ class LegHeatMap extends StatelessWidget {
       children: [
         _emptyCell(),
         _ratingCell(cell.rating),
-        _newLabelCell(cell.timeLabel, true),
+        _newLabelCell(cell.timeLabel, true, true),
         RotatedBox(
           quarterTurns: 1,
           child: Container(
@@ -296,7 +296,7 @@ class LegHeatMap extends StatelessWidget {
       children: [
         _newNodeCell(),
         _emptyCell(),
-        _newLabelCell(time, true),
+        _newLabelCell(time, true, true),
         RotatedBox(
           quarterTurns: 1,
           child: Container(
@@ -340,7 +340,7 @@ class LegHeatMap extends StatelessWidget {
     );
   }
 
-  _newLabelCell(String labelText, bool station) {
+  _newLabelCell(String labelText, bool station, bool bold) {
     return Container(
 //      alignment: station ? Alignment(0, -.5) : Alignment(3, -.5),
 //      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),// put this back after
@@ -350,6 +350,7 @@ class LegHeatMap extends StatelessWidget {
         labelText,
         overflow: TextOverflow.visible,
         textAlign: TextAlign.center,
+        style: TextStyle(fontWeight: bold ? FontWeight.bold : FontWeight.normal),
       ),
     );
   }
@@ -360,7 +361,7 @@ class LegHeatMap extends StatelessWidget {
         children: [
           _emptyCell(),
           _ratingCell(cell.rating),
-          _newLabelCell(cell.timeLabel, false),
+          _newLabelCell(cell.timeLabel, false, false),
           _emptyCell(),
         ],
       ),

@@ -44,31 +44,18 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     if (validateAndSave()) {
       try {
         if (_isLoginForm) {
-          AuthService.sendLoginRequest(context, _email, _password)
-              .then((user) {
+          AuthService.sendLoginRequest(context, _email, _password).then((user) {
             if (user != null) StateContainer.of(context).login(user);
           });
         } else {
           AuthService.sendSignupRequest(context, _name, _email, _password)
               .then((user) {
-            if (user != null) {
-              StateContainer.of(context).login(user);
-            }
+            if (user != null) StateContainer.of(context).login(user);
           });
         }
         setState(() {
           _isLoading = false;
         });
-
-//        if (userId.length > 0 && userId != null && _isLoginForm) {
-//          widget.loginCallback();
-//        }
-
-//        if (token != null && token.length > 0 && _isLoginForm) {
-//          setState(() {
-//            authStatus = AuthStatus.LOGGED_IN;
-//          });
-//        }
       } catch (e) {
         print('Error: $e');
         setState(() {

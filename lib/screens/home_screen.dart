@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:time_wise_app/models/station.dart';
 import 'package:time_wise_app/screens/account/account_view.dart';
 import 'package:time_wise_app/screens/login_signup_screen.dart';
 import 'package:time_wise_app/screens/profile/profile_home_screen.dart';
 import 'package:time_wise_app/screens/profile/profile_view.dart';
 import 'package:time_wise_app/screens/trips/trips_view.dart';
+import 'package:time_wise_app/services/trip_service.dart';
 import 'package:time_wise_app/state_container.dart';
 
 enum AuthStatus {
@@ -24,23 +26,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (StateContainer.of(context).getAppState().isLoggedIn())
+    if (StateContainer.of(context).getAppState().isLoggedIn()) {
       authStatus = AuthStatus.LOGGED_IN;
-    else
+    } else
       authStatus = AuthStatus.NOT_LOGGED_IN;
 
     switch (authStatus) {
       case AuthStatus.NOT_LOGGED_IN:
-        return LoginSignupScreen();
+        {
+          return LoginSignupScreen();
+        }
         break;
-      default:
-        return Scaffold(
-          body: SafeArea(
-            top: false,
-            child: _buildApp(),
-          ),
-          bottomNavigationBar: _buildBottomNavigationBar(),
-        );
+      case AuthStatus.LOGGED_IN:
+        {
+          return Scaffold(
+            body: SafeArea(
+              top: false,
+              child: _buildApp(),
+            ),
+            bottomNavigationBar: _buildBottomNavigationBar(),
+          );
+        }
+        break;
     }
   }
 
@@ -59,8 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         decoration: BoxDecoration(
             border: Border(
-              top: BorderSide(width: .5, color: Colors.grey),
-            )),
+          top: BorderSide(width: .5, color: Colors.grey),
+        )),
         child: BottomNavigationBar(
             showSelectedLabels: true,
             showUnselectedLabels: true,
@@ -72,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             items: [
               BottomNavigationBarItem(
-                backgroundColor: Colors.indigoAccent,
+                backgroundColor: Colors.indigo[300],
                 title: Text('Trips', style: TextStyle(fontSize: 14.0)),
                 icon: Icon(
                   LineAwesomeIcons.train,
@@ -80,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               BottomNavigationBarItem(
-                backgroundColor: Colors.indigoAccent,
+                backgroundColor: Colors.indigo[300],
                 title: Text('Profile', style: TextStyle(fontSize: 14.0)),
                 icon: Icon(
                   LineAwesomeIcons.bar_chart_1,
@@ -88,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               BottomNavigationBarItem(
-                backgroundColor: Colors.indigoAccent,
+                backgroundColor: Colors.indigo[300],
                 title: Text('Account', style: TextStyle(fontSize: 14.0)),
                 icon: Icon(
                   LineAwesomeIcons.user_circle,

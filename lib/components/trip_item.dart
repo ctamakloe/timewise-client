@@ -2,11 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:time_wise_app/models/trip.dart';
+import 'package:time_wise_app/screens/trips/trip_details_screen.dart';
 
 class TripListItem extends StatefulWidget {
   final Trip trip;
+  final Function() onTripChanged;
 
-  const TripListItem({Key key, this.trip}) : super(key: key);
+  const TripListItem(
+      {Key key, @required this.trip, @required this.onTripChanged})
+      : super(key: key);
 
   @override
   _TripListItemState createState() => _TripListItemState();
@@ -17,7 +21,16 @@ class _TripListItemState extends State<TripListItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/tripDetails', arguments: widget.trip);
+//        Navigator.pushNamed(context, '/tripDetails', arguments: widget.trip);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => TripDetailsScreen(
+                    trip: widget.trip,
+                    onTripChanged: widget.onTripChanged,
+                  )),
+        );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0),

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:time_wise_app/services/auth_service.dart';
 import 'package:time_wise_app/screens/home_screen.dart';
 import 'package:time_wise_app/screens/login_signup_screen.dart';
-import 'package:time_wise_app/screens/trips/trip_details/trip_details_screen.dart';
+import 'package:time_wise_app/screens/trips/trip_details_screen.dart';
 import 'package:time_wise_app/screens/trips/trip_evaluation_screen.dart';
 import 'package:time_wise_app/screens/trips/trip_start_screen.dart';
-import 'package:time_wise_app/screens/trips/trips_home_screen.dart';
+import 'package:time_wise_app/screens/trips/trips_overview_screen.dart';
 import 'package:time_wise_app/screens/trips/trips_list_screen.dart';
-import 'package:time_wise_app/screens/wizard/wizard_screen.dart';
+import 'package:time_wise_app/screens/wizard/trip_planner_screen.dart';
 
 class TripsView extends StatefulWidget {
   const TripsView({
@@ -36,19 +36,19 @@ class _TripsViewState extends State<TripsView> {
             switch (settings.name) {
               case '/':
 //                if (widget.startRoute == 'tripPlanner') return WizardScreen();
-                return TripsHomeScreen();
+                return TripsOverviewScreen();
               case '/tripsHome':
-                return TripsHomeScreen();
+                return TripsOverviewScreen();
               case '/tripsList':
                 return TripsListScreen(arguments);
-              case '/tripDetails':
-                return TripDetailsScreen(arguments);
-              case '/tripStart':
-                return TripStartScreen(arguments);
-              case '/tripEval':
-                return TripEvaluationScreen(arguments);
+//              case '/tripDetails':
+//                return TripDetailsScreen(arguments);
+//              case '/tripStart':
+//                return TripStartScreen(arguments);
+//              case '/tripEval':
+//                return TripEvaluationScreen(arguments);
               case '/tripPlanner':
-                return WizardScreen();
+                return TripPlannerScreen();
             }
           },
         );
